@@ -176,13 +176,14 @@
       $('#sum-location').textContent = ventLabel(d.ventLocation);
       const addonNames = d.addons.map(id => (P.addons.find(a => a.id === id) || {}).label).filter(Boolean);
       $('#sum-addons-row').hidden = !addonNames.length; $('#sum-addons').textContent = addonNames.join(', ');
-      $('#sum-when').textContent = d.date ? `${fmtDate(d.date)}${d.window ? ', ' + d.window : ''}` : '—';
+      $('#sum-when').innerHTML = d.date ? `${fmtDate(d.date)}${d.window ? '<br>' + d.window : ''}` : '—';
       $('#sum-address').textContent = d.address ? `${d.address}, ${d.city || ''} ${d.zip || ''}`.trim() : '—';
       const label = (d.ventLocation === 'unsure' ? 'from ' : '') + money(t);
       $('#sum-total').textContent = label; if (mobileTotal) mobileTotal.textContent = label;
       $('#sum-note').textContent = d.ventLocation === 'unsure' ? P.base.unsure.note : (P.base.ground.price && 'Pay when the job is done. Card, cash, Zelle or Venmo. No deposit.');
     }
     form.addEventListener('input', () => { dirty = true; update(); save(); });
+    const phoneEl = $('#phone'); if (phoneEl) phoneEl.addEventListener('blur', () => { phoneEl.value = formatPhone(phoneEl.value); });
     form.addEventListener('change', () => { dirty = true; update(); save(); });
 
     // Validation per step
@@ -211,6 +212,7 @@
       return ok;
     }
 
+    const optLabel = (id) => { const el = $('#' + id); return el && el.selectedOptions[0] ? el.selectedOptions[0].textContent : ''; };
     function review() {
       const d = data(); const t = total(d);
       const addonRows = d.addons.map(id => P.addons.find(a => a.id === id)).filter(Boolean).map(a => `<div class="row"><span>${a.label}</span><span>+${money(a.price)}</span></div>`).join('');
@@ -218,11 +220,11 @@
         <div class="row"><span>Service</span><span>Dryer vent cleaning <button type="button" class="edit" data-go="1">edit</button></span></div>
         <div class="row"><span>Vent exit</span><span>${ventLabel(d.ventLocation)} — ${money(P.base[d.ventLocation].price)}</span></div>
         ${addonRows}
-        <div class="row"><span>Dryer</span><span>${d.dryerType} · ${d.homeType} · laundry ${d.laundryFloor} <button type="button" class="edit" data-go="2">edit</button></span></div>
+        <div class="row"><span>Dryer</span><span>${optLabel('dryerType')} · ${optLabel('homeType')} · ${optLabel('laundryFloor')} laundry <button type="button" class="edit" data-go="2">edit</button></span></div>
         ${d.symptoms.length ? `<div class="row"><span>Noticed</span><span>${d.symptoms.join(', ')}</span></div>` : ''}
         <div class="row"><span>When</span><span>${fmtDate(d.date)}, ${d.window}${d.flexible ? ' (flexible)' : ''} <button type="button" class="edit" data-go="3">edit</button></span></div>
         <div class="row"><span>Where</span><span>${d.address}, ${d.city} ${d.zip}</span></div>
-        <div class="row"><span>Contact</span><span>${d.name} · ${d.phone} · ${d.email} <button type="button" class="edit" data-go="4">edit</button></span></div>
+        <div class="row"><span>Contact</span><span>${d.name} · ${formatPhone(d.phone)} · ${d.email} <button type="button" class="edit" data-go="4">edit</button></span></div>
         <div class="row total"><span>Total${d.ventLocation === 'unsure' ? ' (from)' : ''}</span><span>${money(t)}</span></div>`;
       $$('.edit', $('#review-card')).forEach(b => b.addEventListener('click', () => go(+b.dataset.go)));
     }
@@ -237,7 +239,7 @@
       if (mobileNext) mobileNext.textContent = n === LAST ? 'Confirm booking' : 'Continue';
       if (n === LAST) review();
       save();
-      if (initialised) window.scrollTo({ top: Math.max(0, form.getBoundingClientRect().top + window.scrollY - 110), behavior: reduced ? 'auto' : 'smooth' });
+      if (initialised) { const anchor = $('#bk-progress') || form; window.scrollTo({ top: Math.max(0, anchor.getBoundingClientRect().top + window.scrollY - 96), behavior: reduced ? 'auto' : 'smooth' }); }
       initialised = true;
       if (n === 2) setTimeout(() => { const f = $('#dryerType'); f && f.focus({ preventScroll: true }); }, 350);
     }

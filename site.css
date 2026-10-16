@@ -121,8 +121,8 @@ p { margin: 0 0 1em; }
 .house-svg { width: 100%; height: auto; }
 .ill-label { font-family: var(--font-body); font-size: 15px; font-weight: 700; fill: var(--ink-2); }
 .ill-label-strong { fill: var(--accent); font-size: 17px; }
-.house-compact .ill-label, .vent-ill .ill-label { font-size: 20px; }
-.house-compact .ill-label-strong, .vent-ill .ill-label-strong { font-size: 22px; }
+.house-compact .ill-label, .vent-ill .ill-label { font-size: 26px; }
+.house-compact .ill-label-strong, .vent-ill .ill-label-strong { font-size: 30px; }
 .exit-ring { fill: none; stroke: var(--accent); stroke-width: 3; opacity: .85; transform-origin: center; transform-box: fill-box; animation: ring 2.2s ease-out infinite; }
 @keyframes ring { 0% { transform: scale(.55); opacity: .9; } 100% { transform: scale(1.35); opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .exit-ring { animation: none; opacity: .6; } .lint-puff, .exhaust { display: none; } }
@@ -395,6 +395,7 @@ input.invalid, select.invalid { border-color: var(--warn); }
   .bk-nav .btn-primary, .bk-nav #bk-submit { display: none; }
   .bk-nav { justify-content: flex-start; }
 }
+.confirm .check-list.left { text-align: left; max-width: 520px; margin-left: auto; margin-right: auto; }
 .confirm .confirm-mark { width: 72px; height: 72px; border-radius: 50%; background: var(--teal-soft); color: var(--teal); display: grid; place-items: center; margin: 0 auto 1.25rem; }
 .confirm-actions { display: flex; gap: .8rem; justify-content: center; flex-wrap: wrap; margin: 1.5rem 0 2.5rem; }
 .admin-form { display: flex; gap: .5rem; max-width: 480px; margin-bottom: 1.5rem; }
