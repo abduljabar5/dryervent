@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /confirmation.html
+
+Sitemap: https://twincitiesdryervent.com/sitemap.xml
