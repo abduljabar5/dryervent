@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin.html
 Disallow: /confirmation.html
 
-Sitemap: https://twincitiesdryervent.com/sitemap.xml
+Sitemap: https://twin-cities-dryer-vent.netlify.app/sitemap.xml

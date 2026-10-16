@@ -5,7 +5,7 @@ export const SITE = {
   name: 'Twin Cities Dryer Vent Pros',
   shortName: 'TC Dryer Vent Pros',
   tagline: 'Dryer vent cleaning that books in 60 seconds.',
-  domain: 'https://twincitiesdryervent.com',
+  domain: 'https://twin-cities-dryer-vent.netlify.app', // TODO: change to the real domain once purchased
   // TODO: replace placeholder phone + email before launch
   phone: '(612) 555-0147',
   phoneE164: '+16125550147',
