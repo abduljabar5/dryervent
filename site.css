@@ -16,6 +16,7 @@
   --header-h: 72px;
 }
 *,*::before,*::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 17px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
 img, svg { max-width: 100%; display: block; }
