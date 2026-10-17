@@ -97,15 +97,70 @@
   // ---------- Admin ----------
   const adminForm = $('#admin-form');
   if (adminForm) {
-    adminForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const list = $('#admin-list'); list.textContent = 'Loading…';
-      try {
-        const r = await fetch('/api/list-bookings', { headers: { Authorization: 'Bearer ' + $('#admin-token').value } });
-        if (!r.ok) throw new Error(r.status);
-        const { bookings } = await r.json();
-        list.innerHTML = bookings.length ? bookings.map(b => `<div class="admin-item"><div><strong>${b.confirmationNumber}</strong><br>${b.createdAt ? new Date(b.createdAt).toLocaleString() : ''}</div><div>${b.name}<br><a href="tel:${b.phone}">${b.phone}</a><br>${b.email}</div><div>${b.date} ${b.window}<br>${b.address}, ${b.city} ${b.zip}</div><div>${b.ventLabel} ${b.addonLabels && b.addonLabels.length ? '<br>+ ' + b.addonLabels.join(', ') : ''}<br><strong>${money(b.total)}</strong>${b.status ? '<br>' + b.status : ''}</div></div>`).join('') : 'No bookings yet.';
-      } catch (err) { list.textContent = 'Could not load (' + err.message + '). Check the token.'; }
+    const list = $('#admin-list'), tokenInput = $('#admin-token');
+    try { const t = sessionStorage.getItem('dv_admin'); if (t) tokenInput.value = t; } catch {}
+    const token = () => tokenInput.value.trim();
+    const api = async (path, opts = {}) => {
+      const r = await fetch(path, { ...opts, headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token(), ...(opts.headers || {}) } });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d.error || ('HTTP ' + r.status));
+      return d;
+    };
+    const esc = (v) => String(v ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    const badge = (b) => {
+      const st = b.status || 'new';
+      const label = st === 'paid' ? `Paid ${money(b.paidAmount ?? b.finalTotal ?? b.total)}${b.paymentMethod ? ' · ' + b.paymentMethod.replace('-', ' ') : ''}` : st === 'cancelled' ? 'Cancelled' : st === 'done' ? 'Done · unpaid' : 'Booked';
+      return `<span class="badge badge-${st}">${esc(label)}</span>`;
+    };
+    const card = (b) => {
+      const due = b.finalTotal ?? b.total;
+      const payUrl = location.origin + '/pay?c=' + encodeURIComponent(b.confirmationNumber);
+      return `<div class="admin-item${b.status === 'cancelled' ? ' is-cancelled' : ''}" data-conf="${esc(b.confirmationNumber)}">
+        <div class="admin-head"><div><strong>${esc(b.confirmationNumber)}</strong> ${badge(b)}</div><div class="muted small">${b.createdAt ? new Date(b.createdAt).toLocaleString() : ''}</div></div>
+        <div class="admin-grid">
+          <div><div class="k">Customer</div>${esc(b.name)}<br><a href="tel:${esc(String(b.phone || '').replace(/\D/g, ''))}">${esc(b.phone)}</a><br><a href="mailto:${esc(b.email)}">${esc(b.email)}</a></div>
+          <div><div class="k">When / where</div><strong>${esc(b.dateLabel || b.date)}</strong>, ${esc(b.window)}${b.flexible ? ' <span class="muted">(flexible)</span>' : ''}<br><a href="https://maps.google.com/?q=${encodeURIComponent((b.address || '') + ', ' + (b.city || '') + ' MN ' + (b.zip || ''))}" target="_blank" rel="noopener">${esc(b.address)}, ${esc(b.city)} ${esc(b.zip)}</a></div>
+          <div><div class="k">Job</div>${esc(b.ventLabel)}${b.ventLocation === 'unsure' ? ' <span class="muted">(confirm on site)</span>' : ''}${b.addonLabels && b.addonLabels.length ? '<br>+ ' + b.addonLabels.map(esc).join('<br>+ ') : ''}${b.access ? `<br><span class="muted">Access: ${esc(b.access)}</span>` : ''}${b.notes ? `<br><span class="muted">Notes: ${esc(b.notes)}</span>` : ''}</div>
+          <div><div class="k">Money</div>Booked ${money(b.total)}${b.finalTotal != null && b.finalTotal !== b.total ? ` · final <strong>${money(b.finalTotal)}</strong>` : ''}
+            ${b.status === 'paid' ? '' : `<label class="admin-amount">Final amount <span class="prefix">$</span><input type="number" min="0" max="5000" step="1" value="${esc(due)}" data-act="amount"></label><button class="btn btn-ghost btn-sm" data-act="save-amount">Save</button>`}
+          </div>
+        </div>
+        <div class="admin-actions">
+          ${b.status === 'paid' ? '' : `<select data-act="method"><option value="cash">Cash</option><option value="zelle">Zelle</option><option value="venmo">Venmo</option><option value="card-in-person">Card in person</option></select><button class="btn btn-primary btn-sm" data-act="mark-paid">Mark paid</button>`}
+          <button class="btn btn-ghost btn-sm" data-act="copy-link" data-url="${esc(payUrl)}">Copy pay link</button>
+          <a class="btn btn-ghost btn-sm" href="sms:${esc(String(b.phone || '').replace(/\D/g, ''))}?&body=${encodeURIComponent(`Hi ${(b.name || '').split(' ')[0]}, here's your Clear Vent payment link for ${money(due)}: ${payUrl} — or pay cash/Zelle/Venmo. Thanks!`)}">Text pay link</a>
+          ${b.status === 'cancelled' ? `<button class="btn btn-ghost btn-sm" data-act="status" data-status="new">Restore</button>` : b.status === 'paid' && b.paymentMethod !== 'stripe' ? `<button class="btn btn-ghost btn-sm" data-act="status" data-status="done">Undo paid</button>` : b.status !== 'paid' ? `<button class="btn btn-ghost btn-sm danger" data-act="status" data-status="cancelled">Cancel booking</button>` : ''}
+          <span class="admin-msg muted small" aria-live="polite"></span>
+        </div>
+      </div>`;
+    };
+    let bookings = [];
+    const render = () => {
+      const show = $('#admin-show') ? $('#admin-show').value : 'open';
+      const rows = bookings.filter(b => show === 'all' ? true : show === 'paid' ? b.status === 'paid' : (b.status !== 'paid' && b.status !== 'cancelled'));
+      list.innerHTML = rows.length ? rows.map(card).join('') : '<p class="muted">Nothing here.</p>';
+    };
+    const load = async () => {
+      list.textContent = 'Loading…';
+      try { ({ bookings } = await api('/api/list-bookings')); try { sessionStorage.setItem('dv_admin', token()); } catch {} render(); }
+      catch (err) { list.textContent = 'Could not load (' + err.message + '). Check the token.'; }
+    };
+    adminForm.addEventListener('submit', (e) => { e.preventDefault(); load(); });
+    if ($('#admin-show')) $('#admin-show').addEventListener('change', render);
+    if (token()) load();
+    list.addEventListener('click', async (e) => {
+      const btn = e.target.closest('[data-act]'); if (!btn || btn.tagName === 'INPUT' || btn.tagName === 'SELECT') return;
+      const item = btn.closest('.admin-item'), conf = item.dataset.conf, msg = $('.admin-msg', item);
+      const update = async (payload) => {
+        btn.disabled = true; msg.textContent = 'Saving…';
+        try { const { booking } = await api('/api/update-booking', { method: 'POST', body: JSON.stringify({ confirmationNumber: conf, ...payload }) }); bookings = bookings.map(b => b.confirmationNumber === conf ? booking : b); render(); }
+        catch (err) { msg.textContent = err.message; btn.disabled = false; }
+      };
+      const act = btn.dataset.act;
+      if (act === 'save-amount') { const v = $('[data-act=amount]', item).value; await update({ finalTotal: v === '' ? null : Number(v) }); }
+      else if (act === 'mark-paid') { const v = $('[data-act=amount]', item)?.value; await update({ status: 'paid', paymentMethod: $('[data-act=method]', item).value, ...(v !== undefined && v !== '' ? { finalTotal: Number(v) } : {}) }); }
+      else if (act === 'status') { if (btn.dataset.status === 'cancelled' && !confirm('Cancel booking ' + conf + '?')) return; await update({ status: btn.dataset.status }); }
+      else if (act === 'copy-link') { try { await navigator.clipboard.writeText(btn.dataset.url); msg.textContent = 'Link copied'; } catch { msg.textContent = btn.dataset.url; } }
     });
   }
 

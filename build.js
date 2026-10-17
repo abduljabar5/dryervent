@@ -705,7 +705,8 @@ ${ctaBand()}`,
   emit('/admin.html', page({ ...common, path: '/admin.html', noindex: true, hideStickyBook: true, title: 'Bookings admin', description: '', body: `
 <section class="section"><div class="container">
 <h1 class="h2">Bookings</h1>
-<form id="admin-form" class="admin-form"><input type="password" id="admin-token" placeholder="Admin token" autocomplete="current-password"><button class="btn btn-primary" type="submit">Load</button></form>
+<form id="admin-form" class="admin-form"><input type="password" id="admin-token" placeholder="Admin token" autocomplete="current-password"><button class="btn btn-primary" type="submit">Load</button><select id="admin-show" aria-label="Show"><option value="open">Open jobs</option><option value="paid">Paid</option><option value="all">All</option></select></form>
+<p class="muted small">Set the final amount after you confirm roof vs wall on site; the pay link and Stripe checkout use it. Mark cash, Zelle or Venmo payments here. Card payments through the pay link mark themselves.</p>
 <div id="admin-list" class="admin-list"></div>
 </div></section>` }), { sitemap: false });
 }

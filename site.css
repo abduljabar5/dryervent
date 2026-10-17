@@ -402,8 +402,23 @@ input.invalid, select.invalid { border-color: var(--warn); }
 .confirm-actions { display: flex; gap: .8rem; justify-content: center; flex-wrap: wrap; margin: 1.5rem 0 2.5rem; }
 .admin-form { display: flex; gap: .5rem; max-width: 480px; margin-bottom: 1.5rem; }
 .admin-list { display: grid; gap: .75rem; }
-.admin-item { background: #fff; border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 1rem 1.2rem; font-size: .95rem; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: .5rem; }
-@media (max-width: 800px) { .admin-item { grid-template-columns: 1fr 1fr; } }
+.admin-item { background: #fff; border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 1rem 1.2rem; font-size: .95rem; display: grid; gap: .8rem; }
+.admin-item.is-cancelled { opacity: .55; }
+.admin-head { display: flex; justify-content: space-between; gap: 1rem; align-items: center; flex-wrap: wrap; }
+.admin-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+.admin-grid .k { font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); margin-bottom: .2rem; }
+.admin-amount { display: inline-flex; align-items: center; gap: .3rem; margin: .4rem .4rem 0 0; font-size: .9rem; color: var(--ink-3); }
+.admin-amount input { width: 5.5rem; padding: .35rem .5rem; border: 1px solid var(--line); border-radius: 8px; font: inherit; font-weight: 600; color: var(--ink); }
+.admin-actions { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; border-top: 1px solid var(--line); padding-top: .8rem; }
+.admin-actions select { width: auto; flex: 0 0 auto; padding: .45rem .6rem; border: 1px solid var(--line); border-radius: 999px; font: inherit; font-size: .9rem; background: #fff; }
+.btn-sm { padding: .45rem .9rem; font-size: .9rem; }
+.btn.danger { color: #b3261e; }
+.badge { display: inline-block; padding: .2rem .6rem; border-radius: 999px; font-size: .78rem; font-weight: 700; margin-left: .4rem; vertical-align: middle; background: var(--paper-2, #f1ebe2); color: var(--ink-2); }
+.badge-paid { background: #e3f4ef; color: #146c4e; }
+.badge-cancelled { background: #fbe9e7; color: #b3261e; }
+.badge-done { background: #fff3e0; color: #9a4b00; }
+@media (max-width: 900px) { .admin-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .admin-grid { grid-template-columns: 1fr; } .admin-form { flex-wrap: wrap; } }
 
 @media (max-width: 420px) { .brand-name { font-size: 1rem; } .brand-mark { width: 32px; height: 32px; } }
 
