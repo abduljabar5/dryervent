@@ -455,6 +455,45 @@ function booking() {
   }), { priority: 0.9, changefreq: 'monthly' });
 
   // Confirmation
+  emit('/pay.html', page({
+    ...common, path: '/pay.html', noindex: true, hideStickyBook: true,
+    title: `Pay Online | ${SITE.shortName}`, description: 'Pay for your dryer vent cleaning securely by card.',
+    body: `
+<section class="section confirm">
+  <div class="container narrow center">
+    <h1 class="h2">Pay online</h1>
+    <p class="lead">Enter your confirmation number and we'll take you to a secure card payment. You can also pay on completion — card, cash, Zelle or Venmo.</p>
+    <form id="pay-form" class="review-card left" novalidate>
+      <div class="field">
+        <label for="pay-conf">Confirmation number</label>
+        <input type="text" id="pay-conf" name="conf" placeholder="DV-7K2QX" autocomplete="off" autocapitalize="characters" required>
+      </div>
+      <p class="field-error" id="pay-error" hidden></p>
+      <button type="submit" class="btn btn-primary" id="pay-lookup">Find my booking</button>
+    </form>
+    <div class="review-card left" id="pay-summary" hidden></div>
+    <p class="muted small">Can't find your number? It's in your confirmation email, or ${phoneLink()} and we'll sort it out.</p>
+  </div>
+</section>`,
+    scripts: '<script src="/app.js" defer></script>'
+  }), { sitemap: false });
+
+  emit('/pay-success.html', page({
+    ...common, path: '/pay-success.html', noindex: true, hideStickyBook: true,
+    title: `Payment Received | ${SITE.shortName}`, description: 'Thanks — your payment went through.',
+    body: `
+<section class="section confirm">
+  <div class="container narrow center">
+    <div class="confirm-mark" aria-hidden="true"><svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div>
+    <h1 class="h2">Payment received.</h1>
+    <p class="lead">Thanks! Stripe is emailing you a receipt for booking <strong id="pay-success-conf">—</strong>. Nothing else to do.</p>
+    <div class="confirm-actions"><a href="/" class="btn btn-primary">Back to home</a></div>
+    <p class="muted small">Questions about your visit? Reply to your confirmation email or ${phoneLink()}.</p>
+  </div>
+</section>`,
+    scripts: '<script src="/app.js" defer></script>'
+  }), { sitemap: false });
+
   emit('/confirmation.html', page({
     ...common, path: '/confirmation.html', noindex: true, hideStickyBook: true,
     title: `Booking Confirmed | ${SITE.shortName}`, description: 'Your dryer vent cleaning is booked.',
@@ -469,6 +508,7 @@ function booking() {
       <a href="/" class="btn btn-ghost">Back to home</a>
       <a id="conf-cal" class="btn btn-primary" href="#" target="_blank" rel="noopener">Add to Google Calendar</a>
     </div>
+    <p class="muted small" id="conf-pay-note">Pay when the job is done — card, cash, Zelle or Venmo. Prefer to pay online? <a id="conf-pay" href="/pay">Pay securely by card</a> any time before or after your visit.</p>
     <h2 class="h4">Before we arrive</h2>
     <ul class="check-list left">
       <li>Clear the top of and the space in front of the dryer</li>
@@ -827,7 +867,7 @@ function seoFiles() {
   const today = new Date().toISOString().slice(0, 10);
   const sm = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${pages.map(p => `  <url><loc>${url(p.path)}</loc><lastmod>${today}</lastmod><changefreq>${p.changefreq}</changefreq><priority>${p.priority.toFixed(1)}</priority></url>`).join('\n')}\n</urlset>\n`;
   writeFileSync(OUT + 'sitemap.xml', sm);
-  writeFileSync(OUT + 'robots.txt', `User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /confirmation\n\nSitemap: ${url('/sitemap.xml')}\n`);
+  writeFileSync(OUT + 'robots.txt', `User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /confirmation\nDisallow: /pay-success\n\nSitemap: ${url('/sitemap.xml')}\n`);
   // llms.txt — answer-engine friendly summary
   const llms = `# ${SITE.name}
 

@@ -291,6 +291,47 @@
   }
 
   // ---------- Confirmation page ----------
+  // ---- Pay online page ----
+  const payForm = $('#pay-form');
+  if (payForm) {
+    const input = $('#pay-conf'), err = $('#pay-error'), sum = $('#pay-summary'), btn = $('#pay-lookup');
+    const qc = new URLSearchParams(location.search).get('c'); if (qc) input.value = qc.toUpperCase();
+    const showErr = (m) => { err.textContent = m; err.hidden = false; sum.hidden = true; };
+    const lookup = async () => {
+      const conf = input.value.trim().toUpperCase(); err.hidden = true;
+      if (!conf) return showErr('Enter your confirmation number.');
+      btn.disabled = true; btn.textContent = 'Looking up…';
+      try {
+        const r = await fetch('/api/booking-lookup?c=' + encodeURIComponent(conf)); const d = await r.json();
+        if (!r.ok) return showErr(d.error || 'Could not find that booking.');
+        const paid = d.status === 'paid';
+        sum.innerHTML = `
+          <div class="row"><span>Booking</span><span>${d.confirmationNumber}${d.firstName ? ' · ' + d.firstName : ''}</span></div>
+          <div class="row"><span>Service</span><span>${d.ventLabel}${d.addonLabels.length ? '<br>+ ' + d.addonLabels.join('<br>+ ') : ''}</span></div>
+          ${d.dateLabel ? `<div class="row"><span>When</span><span>${d.dateLabel}${d.window ? ', ' + d.window : ''}</span></div>` : ''}
+          <div class="row total"><span>${paid ? 'Paid' : 'Amount due'}</span><span>${money(paid ? d.paidAmount : d.amount)}</span></div>
+          ${paid ? '<p class="muted small">This booking is already paid. Thank you!</p>' : d.fromPrice ? '<p class="muted small">Roof-vs-wall pricing is confirmed on site. If the final amount differs, we\'ll adjust it before you pay.</p>' : ''}
+          ${paid ? '' : `<button type="button" class="btn btn-primary" id="pay-now">Pay ${money(d.amount)} by card</button><p class="muted small">Secure checkout by Stripe. Apple Pay and Google Pay supported.</p>`}`;
+        sum.hidden = false;
+        const payBtn = $('#pay-now');
+        if (payBtn) payBtn.addEventListener('click', async () => {
+          payBtn.disabled = true; payBtn.textContent = 'Opening secure checkout…';
+          try {
+            const r2 = await fetch('/api/create-checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ confirmationNumber: conf }) });
+            const d2 = await r2.json();
+            if (!r2.ok || !d2.url) throw new Error(d2.error || 'Could not start checkout');
+            location.href = d2.url;
+          } catch (e) { showErr(e.message); payBtn.disabled = false; payBtn.textContent = 'Pay by card'; }
+        });
+      } catch { showErr('Something went wrong. Please try again or call us.'); }
+      finally { btn.disabled = false; btn.textContent = 'Find my booking'; }
+    };
+    payForm.addEventListener('submit', (e) => { e.preventDefault(); lookup(); });
+    if (qc) lookup();
+  }
+  const paySuccessConf = $('#pay-success-conf');
+  if (paySuccessConf) paySuccessConf.textContent = new URLSearchParams(location.search).get('c') || '—';
+
   const confNum = $('#conf-number');
   if (confNum) {
     let b = null; try { b = JSON.parse(sessionStorage.getItem('dvp_last_booking') || 'null'); } catch {}
@@ -306,6 +347,7 @@
         <div class="row"><span>Where</span><span>${b.address}, ${b.city} ${b.zip}</span></div>
         <div class="row"><span>Contact</span><span>${b.name} · ${b.phone}</span></div>
         <div class="row total"><span>Total${b.ventLocation === 'unsure' ? ' (from)' : ''}</span><span>${money(b.total)}</span></div>`;
+      const payLink = $('#conf-pay'); if (payLink && b.confirmationNumber) payLink.href = '/pay?c=' + encodeURIComponent(b.confirmationNumber);
       const cal = $('#conf-cal');
       if (cal && b.date) {
         const [y, m, d] = b.date.split('-'); const hh = (b.window.match(/^(\d+)/) || [])[1] || '8';

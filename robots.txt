@@ -2,5 +2,6 @@ User-agent: *
 Allow: /
 Disallow: /admin
 Disallow: /confirmation
+Disallow: /pay-success
 
 Sitemap: https://clearventmn.com/sitemap.xml

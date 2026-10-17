@@ -98,7 +98,7 @@ export function customerBookingEmail(b, ctx) {
       </tr></table>
       ${cal ? button(cal, 'Add to Google Calendar', C.navy) : ''}
       <p style="margin:14px 0 0;font:400 13px/1.5 ${FONT};color:${C.muted}">Confirmation <strong style="color:${C.navy}">${esc(b.confirmationNumber)}</strong></p>`)}
-    ${card(`${h('What you booked')}${kv(serviceRows)}`)}
+    ${card(`${h('What you booked')}${kv(serviceRows)}<div style="height:8px"></div>${p(`Pay when the job is done — card, cash, Zelle or Venmo. Prefer to pay online? <a href="${esc(ctx.siteUrl)}/pay?c=${encodeURIComponent(b.confirmationNumber || '')}" style="color:${C.orange};font-weight:600;text-decoration:none">Pay securely by card</a> any time before or after your visit.`, C.muted)}`)}
     ${card(`${h('What happens next')}${steps([
       ['Reminder the night before', 'A quick text so the time is fresh.'],
       ['Tech on the way', 'A heads-up text about 20 minutes out.'],
