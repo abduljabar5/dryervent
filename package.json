@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "build": "node build.js",
-    "dev": "node build.js && netlify dev"
+    "dev": "node build.js && wrangler pages dev .",
+    "deploy": "node build.js && wrangler pages deploy ."
   },
-  "dependencies": {
-    "@netlify/blobs": "^8.2.0"
+  "devDependencies": {
+    "wrangler": "^4"
   }
 }

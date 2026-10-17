@@ -86,7 +86,7 @@
       btn.disabled = true; status.textContent = 'Sending…';
       const data = Object.fromEntries(new FormData(contact).entries());
       try {
-        const r = await fetch('/.netlify/functions/process-booking', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type: 'contact', ...data }) });
+        const r = await fetch('/api/process-booking', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type: 'contact', ...data }) });
         if (!r.ok) throw new Error('bad');
         status.textContent = 'Thanks! We\'ll get back to you shortly.'; contact.reset();
       } catch { status.textContent = 'Could not send. Please call or text us instead.'; }
@@ -101,7 +101,7 @@
       e.preventDefault();
       const list = $('#admin-list'); list.textContent = 'Loading…';
       try {
-        const r = await fetch('/.netlify/functions/list-bookings', { headers: { Authorization: 'Bearer ' + $('#admin-token').value } });
+        const r = await fetch('/api/list-bookings', { headers: { Authorization: 'Bearer ' + $('#admin-token').value } });
         if (!r.ok) throw new Error(r.status);
         const { bookings } = await r.json();
         list.innerHTML = bookings.length ? bookings.map(b => `<div class="admin-item"><div><strong>${b.confirmationNumber}</strong><br>${b.createdAt ? new Date(b.createdAt).toLocaleString() : ''}</div><div>${b.name}<br><a href="tel:${b.phone}">${b.phone}</a><br>${b.email}</div><div>${b.date} ${b.window}<br>${b.address}, ${b.city} ${b.zip}</div><div>${b.ventLabel} ${b.addonLabels && b.addonLabels.length ? '<br>+ ' + b.addonLabels.join(', ') : ''}<br><strong>${money(b.total)}</strong>${b.status ? '<br>' + b.status : ''}</div></div>`).join('') : 'No bookings yet.';
@@ -271,7 +271,7 @@
         source: location.href, createdAt: new Date().toISOString()
       };
       try {
-        const r = await fetch('/.netlify/functions/process-booking', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+        const r = await fetch('/api/process-booking', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
         if (!r.ok) throw new Error('Server responded ' + r.status);
         sessionStorage.setItem('dvp_last_booking', JSON.stringify(payload));
         localStorage.removeItem(KEY);

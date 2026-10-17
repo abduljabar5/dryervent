@@ -1,0 +1,8 @@
+node_modules
+src
+build.js
+.env
+.dev.vars
+README.md
+package.json
+package-lock.json

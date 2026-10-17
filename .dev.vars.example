@@ -1,0 +1,9 @@
+# Copy to .dev.vars for `npx wrangler pages dev` (local). Set the same as Secrets in the Cloudflare Pages dashboard for production.
+RESEND_API_KEY=
+RESEND_FROM_EMAIL=
+OWNER_EMAIL=
+TWILIO_ACCOUNT_SID=
+TWILIO_AUTH_TOKEN=
+TWILIO_FROM_NUMBER=
+OWNER_PHONE=
+ADMIN_TOKEN=
