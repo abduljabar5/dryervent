@@ -267,6 +267,7 @@
         ...d, phone: formatPhone(d.phone),
         ventLabel: ventLabel(d.ventLocation), basePrice: P.base[d.ventLocation].price,
         addonLabels: d.addons.map(id => (P.addons.find(a => a.id === id) || {}).label).filter(Boolean),
+        addonItems: d.addons.map(id => P.addons.find(a => a.id === id)).filter(Boolean).map(a => ({ id: a.id, label: a.label, price: a.price })),
         total: total(d), dateLabel: fmtDate(d.date), smsOk: d.smsOk === 'yes', flexible: d.flexible === 'yes',
         source: location.href, createdAt: new Date().toISOString()
       };
