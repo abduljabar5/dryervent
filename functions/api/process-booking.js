@@ -80,7 +80,7 @@ async function handleBooking(b) {
   const ownerPhone = e164(cfg('OWNER_PHONE'));
   if (ownerPhone) results.ownerSms = await sendSms(ownerPhone, `NEW BOOKING ${b.confirmationNumber}: ${b.ventLabel} ${money(b.total)} · ${b.dateLabel} ${b.window} · ${b.address}, ${b.city} · ${b.name} ${b.phone}`);
   const custPhone = e164(b.phone);
-  if (b.smsOk && custPhone) results.customerSms = await sendSms(custPhone, `${BRAND()}: you're booked for dryer vent cleaning ${b.dateLabel}, ${b.window}. Conf ${b.confirmationNumber}. Total ${b.ventLocation === 'unsure' ? 'from ' : ''}${money(b.total)}, pay on completion. Reply or call ${PHONE()} to change. Reply STOP to opt out.`);
+  if (b.smsOk && custPhone) results.customerSms = await sendSms(custPhone, `${BRAND()}: you're booked for dryer vent cleaning ${b.dateLabel}, ${b.window}. Conf ${b.confirmationNumber}. Total ${b.ventLocation === 'unsure' ? 'from ' : ''}${money(b.total)}, pay on completion. Details and how to make changes are in your confirmation email. Reply STOP to opt out.`);
   return results;
 }
 
