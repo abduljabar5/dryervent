@@ -26,7 +26,7 @@ After any change: `node build.js` (Cloudflare Pages runs it automatically on eve
 
 ## Before launch (TODO)
 
-1. Replace the placeholder phone `(612) 555-0147` and email in `src/data/site.js`.
+1. Phone is (612) 682-1616 (Twilio, forwards to owner cell). Email hello@clearventmn.com forwards via Cloudflare Email Routing.
 2. Set the real domain in `src/data/site.js` → `domain`.
 3. Add real job photos to `images/` and reference them on the home/about pages.
 4. Fill `.dev.vars` (copy `.dev.vars.example`) locally and set the same names as **Secrets** in Cloudflare → Workers & Pages → twin-cities-dryer-vent → Settings → Variables.

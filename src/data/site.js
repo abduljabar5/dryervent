@@ -7,8 +7,8 @@ export const SITE = {
   tagline: 'Dryer vent cleaning that books in 60 seconds.',
   domain: 'https://clearventmn.com',
   // TODO: replace placeholder phone + email before launch
-  phone: '(612) 555-0147',
-  phoneE164: '+16125550147',
+  phone: '(612) 682-1616',
+  phoneE164: '+16126821616',
   email: 'hello@clearventmn.com',
   ownerFirstName: 'Abdul',
   city: 'Minneapolis',

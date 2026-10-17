@@ -7,7 +7,7 @@ const money = (n) => '$' + Number(n || 0).toLocaleString('en-US');
 let ENV = {};
 const cfg = (k, d = '') => ENV[k] || d;
 const BRAND = () => cfg('BRAND_NAME', 'Clear Vent');
-const PHONE = () => cfg('BRAND_PHONE', '(612) 555-0147');
+const PHONE = () => cfg('BRAND_PHONE', '(612) 682-1616');
 const SITE_URL = () => cfg('SITE_URL', 'https://clearventmn.com');
 
 async function sendEmail({ to, subject, html, text, replyTo }) {
