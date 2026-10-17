@@ -7,7 +7,7 @@ export const SERVICES = [
     keywords: 'dryer vent cleaning minneapolis, dryer vent cleaning st paul, dryer vent cleaning near me, dryer lint removal, clean dryer vent twin cities',
     h1: 'Dryer Vent Cleaning in the Twin Cities',
     lead: 'Clothes taking two cycles to dry? Dryer running hot? We clean the entire duct from the back of your dryer to the outdoor cap, test airflow, and show you the lint we removed. Flat $139 for wall vents, $199 for roof vents.',
-    answer: 'Dryer vent cleaning removes the lint packed inside the exhaust duct between your dryer and the outside of your house. Twin Cities Dryer Vent Pros uses a rotating brush and HEPA vacuum to scrub the full duct length, clears the exterior cap, and measures airflow before and after. Most homes need it once a year; it typically cuts dry time in half and removes the leading cause of dryer fires.',
+    answer: 'Dryer vent cleaning removes the lint packed inside the exhaust duct between your dryer and the outside of your house. Clear Vent uses a rotating brush and HEPA vacuum to scrub the full duct length, clears the exterior cap, and measures airflow before and after. Most homes need it once a year; it typically cuts dry time in half and removes the leading cause of dryer fires.',
     priceKey: 'ground', faqTags: ['general','signs','process'],
     sections: [
       { h: 'What\'s included in every cleaning', items: [
@@ -30,7 +30,7 @@ export const SERVICES = [
     keywords: 'roof dryer vent cleaning, dryer vent on roof, clean dryer vent through roof, roof vent lint removal, second floor laundry dryer vent',
     h1: 'Roof Dryer Vent Cleaning',
     lead: 'Second-floor laundry room? Your dryer almost certainly vents through the roof, and roof vents clog faster than any other type. We clear the cap from the roof, clean the full vertical run, and verify airflow. $199 flat.',
-    answer: 'A roof dryer vent is cleaned from both ends: the technician removes lint, nests and any screen from the roof cap, then runs a rotary brush down the vertical duct while a vacuum captures lint at the dryer. Roof vents clog faster because lint falls back down the run when the dryer stops and mats against the cap. Twin Cities Dryer Vent Pros charges a flat $199 for roof vents and recommends cleaning them every 6–12 months.',
+    answer: 'A roof dryer vent is cleaned from both ends: the technician removes lint, nests and any screen from the roof cap, then runs a rotary brush down the vertical duct while a vacuum captures lint at the dryer. Roof vents clog faster because lint falls back down the run when the dryer stops and mats against the cap. Clear Vent charges a flat $199 for roof vents and recommends cleaning them every 6–12 months.',
     priceKey: 'roof', faqTags: ['roof','safety'],
     sections: [
       { h: 'Why roof vents are the worst offenders', items: [
@@ -53,7 +53,7 @@ export const SERVICES = [
     keywords: 'wall dryer vent cleaning, ground level dryer vent, basement dryer vent cleaning, dryer vent flap stuck, outdoor dryer vent clogged',
     h1: 'Wall & Ground-Level Dryer Vent Cleaning',
     lead: 'Basement or main-floor laundry? Your vent exits through a side wall, usually a few feet off the ground. We clean the full run, free the flapper, clear lint from the cap, and make sure snow and shrubs aren\'t blocking it. $139 flat.',
-    answer: 'A wall or ground-level dryer vent exits through the side of the house, typically 1–4 feet above grade for basement laundry rooms. Twin Cities Dryer Vent Pros cleans these for a flat $139: the full duct is brushed and vacuumed from inside, the exterior hood is cleared, the flapper is freed, and any screen is removed. These vents are also checked for snow-drift and shrub clearance, which block low vents in Minnesota winters.',
+    answer: 'A wall or ground-level dryer vent exits through the side of the house, typically 1–4 feet above grade for basement laundry rooms. Clear Vent cleans these for a flat $139: the full duct is brushed and vacuumed from inside, the exterior hood is cleared, the flapper is freed, and any screen is removed. These vents are also checked for snow-drift and shrub clearance, which block low vents in Minnesota winters.',
     priceKey: 'ground', faqTags: ['ground','signs'],
     sections: [
       { h: 'Common problems with wall vents', items: [
@@ -75,7 +75,7 @@ export const SERVICES = [
     keywords: 'bird nest in dryer vent, birds in dryer vent removal, dryer vent bird guard, pest proof dryer vent cover, squirrel in dryer vent',
     h1: 'Bird Nest in Your Dryer Vent? We Remove It',
     lead: 'Chirping in the wall, twigs around the cap, or airflow that dropped overnight in spring. Starlings and sparrows love a warm 4-inch vent. We remove the nest, clean and sanitize the duct, and install a cap that keeps them out.',
-    answer: 'Bird nests in dryer vents are removed by opening the exterior cap, extracting the nest material by hand and with a rotary brush, cleaning and sanitizing the full duct, and installing a dryer-rated pest-guard cap. Twin Cities Dryer Vent Pros charges $69 for nest removal on top of a standard cleaning and $89 for a pest-proof cap. Nest material against hot lint is a serious fire hazard, so stop using the dryer until it is cleared.',
+    answer: 'Bird nests in dryer vents are removed by opening the exterior cap, extracting the nest material by hand and with a rotary brush, cleaning and sanitizing the full duct, and installing a dryer-rated pest-guard cap. Clear Vent charges $69 for nest removal on top of a standard cleaning and $89 for a pest-proof cap. Nest material against hot lint is a serious fire hazard, so stop using the dryer until it is cleared.',
     priceKey: 'ground', addonHighlight: ['birdnest','birdguard'], faqTags: ['birds','safety'],
     sections: [
       { h: 'Signs you have a nest', items: [
@@ -97,7 +97,7 @@ export const SERVICES = [
     keywords: 'dryer vent inspection, dryer vent camera inspection, dryer vent airflow test, home inspection dryer vent, dryer vent report',
     h1: 'Dryer Vent Inspection',
     lead: 'Know exactly what\'s inside your duct. We run a camera the full length, measure airflow, and send a written report with photos. Perfect for home purchases, insurance documentation and condo associations.',
-    answer: 'A dryer vent inspection includes a camera pass through the full duct, an airflow velocity reading at the exterior cap, a check for improper materials like vinyl flex duct or screens, and a written photo report. Twin Cities Dryer Vent Pros offers it as a $29 add-on to any cleaning, with before/after cap photos included free on every job.',
+    answer: 'A dryer vent inspection includes a camera pass through the full duct, an airflow velocity reading at the exterior cap, a check for improper materials like vinyl flex duct or screens, and a written photo report. Clear Vent offers it as a $29 add-on to any cleaning, with before/after cap photos included free on every job.',
     priceKey: 'ground', addonHighlight: ['camera'], faqTags: ['process','realestate'],
     sections: [
       { h: 'What the report covers', items: [
@@ -119,7 +119,7 @@ export const SERVICES = [
     keywords: 'apartment dryer vent cleaning, condo dryer vent cleaning, townhome dryer vent cleaning, property management dryer vent cleaning, HOA dryer vent cleaning minneapolis',
     h1: 'Dryer Vent Cleaning for Apartments, Condos & Townhomes',
     lead: 'One day, every unit, one invoice. We work with property managers and associations across the Twin Cities to clean every dryer vent in a building, with a certificate of insurance and a unit-by-unit report.',
-    answer: 'Multi-family dryer vent cleaning is scheduled as a whole-building service day: the company coordinates unit access with the property manager, cleans each unit\'s duct from the dryer to its termination, clears shared roof or wall caps, and delivers one invoice plus a per-unit report. Twin Cities Dryer Vent Pros prices multi-unit cleaning from $79 per unit with a certificate of insurance provided.',
+    answer: 'Multi-family dryer vent cleaning is scheduled as a whole-building service day: the company coordinates unit access with the property manager, cleans each unit\'s duct from the dryer to its termination, clears shared roof or wall caps, and delivers one invoice plus a per-unit report. Clear Vent prices multi-unit cleaning from $79 per unit with a certificate of insurance provided.',
     priceKey: 'ground', faqTags: ['multifamily','safety'],
     sections: [
       { h: 'How a building day works', items: [
@@ -141,7 +141,7 @@ export const SERVICES = [
     keywords: 'dryer vent cleaning before selling house, dryer vent cleaning new home, home inspection dryer vent lint, move in dryer vent cleaning, realtor dryer vent cleaning',
     h1: 'Dryer Vent Cleaning for Home Buyers, Sellers & Movers',
     lead: 'Inspection report flag lint at the dryer vent? Moving into a home where the previous owner never cleaned it? We clean, inspect and document the vent so you start fresh, with photos for your file.',
-    answer: 'When buying or selling a home, a dryer vent cleaning and inspection removes a common inspection flag and documents the duct\'s condition. The service includes full-length cleaning, cap clearing, an airflow reading and photos. Twin Cities Dryer Vent Pros recommends cleaning at move-in because a new owner inherits whatever lint, flex duct or nests the previous owner left in the wall.',
+    answer: 'When buying or selling a home, a dryer vent cleaning and inspection removes a common inspection flag and documents the duct\'s condition. The service includes full-length cleaning, cap clearing, an airflow reading and photos. Clear Vent recommends cleaning at move-in because a new owner inherits whatever lint, flex duct or nests the previous owner left in the wall.',
     priceKey: 'ground', addonHighlight: ['camera','hose'], faqTags: ['realestate','general'],
     sections: [
       { h: 'For buyers and new homeowners', items: [

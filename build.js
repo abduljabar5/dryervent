@@ -5,7 +5,7 @@ import { CITIES } from './src/data/cities.js';
 import { SERVICES } from './src/data/services.js';
 import { FAQS, FAQ_CATEGORIES, faqsByTag } from './src/data/faqs.js';
 import { ARTICLES } from './src/data/articles.js';
-import { page, esc, money, url, houseSvg, faqBlock, faqSchema, breadcrumbs, breadcrumbSchema, serviceSchema, articleSchema, speakable, ctaBand, priceCards, addonTable, trustRow, phoneLink } from './src/layout.js';
+import { page, esc, money, url, clean, houseSvg, faqBlock, faqSchema, breadcrumbs, breadcrumbSchema, serviceSchema, articleSchema, speakable, ctaBand, priceCards, addonTable, trustRow, phoneLink } from './src/layout.js';
 
 const OUT = new URL('.', import.meta.url).pathname;
 const pages = []; // for sitemap
@@ -785,7 +785,7 @@ function blog() {
   const crumbs = [{name:'Home',href:'/'},{name:'Blog',href:'/blog.html'}];
   emit('/blog.html', page({
     ...common, path: '/blog.html', active: '/blog.html',
-    title: 'Dryer Vent Guides & Tips | Twin Cities Dryer Vent Pros Blog',
+    title: 'Dryer Vent Guides & Tips | Clear Vent Blog',
     description: 'Plain-English guides on dryer vent cleaning: warning signs, costs, roof vs wall vents, fire prevention, bird nests, DIY limits and Minnesota winter tips.',
     keywords: 'dryer vent blog, dryer vent tips, dryer vent guide, dryer maintenance tips',
     body: `
@@ -794,7 +794,7 @@ function blog() {
 ${sorted.map(a => `<a href="/blog/${a.slug}.html" class="card article-card reveal"><span class="muted small">${fmtDate(a.date)} · ${a.readTime} min read</span><h3>${esc(a.title)}</h3><p>${esc(a.description)}</p><span class="link-arrow">Read →</span></a>`).join('')}
 </div></section>
 ${ctaBand()}`,
-    schema: [breadcrumbSchema(crumbs), { '@context': 'https://schema.org', '@type': 'Blog', name: `${SITE.name} Blog`, url: url('/blog.html'), blogPost: sorted.map(a => ({ '@type': 'BlogPosting', headline: a.title, url: url('/blog/' + a.slug + '.html'), datePublished: a.date })) }]
+    schema: [breadcrumbSchema(crumbs), { '@context': 'https://schema.org', '@type': 'Blog', name: `${SITE.name} Blog`, url: url('/blog.html'), blogPost: sorted.map(a => ({ '@type': 'BlogPosting', headline: a.title, url: url('/blog/' + a.slug), datePublished: a.date })) }]
   }), { priority: 0.7, changefreq: 'weekly' });
 
   sorted.forEach((a, i) => {
@@ -825,9 +825,9 @@ function fmtDate(iso) { const [y, m, d] = iso.split('-').map(Number); return new
 // ============================================================================
 function seoFiles() {
   const today = new Date().toISOString().slice(0, 10);
-  const sm = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${pages.map(p => `  <url><loc>${url(p.path === '/index.html' ? '/' : p.path)}</loc><lastmod>${today}</lastmod><changefreq>${p.changefreq}</changefreq><priority>${p.priority.toFixed(1)}</priority></url>`).join('\n')}\n</urlset>\n`;
+  const sm = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${pages.map(p => `  <url><loc>${url(p.path)}</loc><lastmod>${today}</lastmod><changefreq>${p.changefreq}</changefreq><priority>${p.priority.toFixed(1)}</priority></url>`).join('\n')}\n</urlset>\n`;
   writeFileSync(OUT + 'sitemap.xml', sm);
-  writeFileSync(OUT + 'robots.txt', `User-agent: *\nAllow: /\nDisallow: /admin.html\nDisallow: /confirmation.html\n\nSitemap: ${url('/sitemap.xml')}\n`);
+  writeFileSync(OUT + 'robots.txt', `User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /confirmation\n\nSitemap: ${url('/sitemap.xml')}\n`);
   // llms.txt — answer-engine friendly summary
   const llms = `# ${SITE.name}
 
@@ -840,7 +840,7 @@ function seoFiles() {
 - Recommended frequency: every 12 months; every 6 months for roof vents, heavy use, pets or gas dryers.
 
 ## Pages
-${pages.filter(p => p.priority >= 0.7).map(p => `- ${url(p.path === '/index.html' ? '/' : p.path)}`).join('\n')}
+${pages.filter(p => p.priority >= 0.7).map(p => `- ${url(p.path)}`).join('\n')}
 
 ## FAQ (${FAQS.length} questions)
 ${url('/faq.html')}

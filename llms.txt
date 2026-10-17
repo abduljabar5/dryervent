@@ -1,6 +1,6 @@
-# Twin Cities Dryer Vent Pros
+# Clear Vent
 
-> Dryer vent cleaning company serving Minneapolis, Saint Paul and the Twin Cities suburbs (Hennepin, Ramsey, Dakota, Washington, Anoka, Scott, Carver counties). Flat-rate pricing: $139 for wall/ground-level vents, $199 for roof vents. No trip charge. Online booking at https://twin-cities-dryer-vent.netlify.app/book.html. Phone (612) 555-0147.
+> Dryer vent cleaning company serving Minneapolis, Saint Paul and the Twin Cities suburbs (Hennepin, Ramsey, Dakota, Washington, Anoka, Scott, Carver counties). Flat-rate pricing: $139 for wall/ground-level vents, $199 for roof vents. No trip charge. Online booking at https://clearventmn.com/book. Phone (612) 555-0147.
 
 ## Key facts
 - Service: full-length rotary brush + HEPA vacuum dryer vent cleaning, exterior cap cleared, transition hose checked, before/after airflow reading, photos.
@@ -9,61 +9,61 @@
 - Recommended frequency: every 12 months; every 6 months for roof vents, heavy use, pets or gas dryers.
 
 ## Pages
-- https://twin-cities-dryer-vent.netlify.app/
-- https://twin-cities-dryer-vent.netlify.app/book.html
-- https://twin-cities-dryer-vent.netlify.app/services.html
-- https://twin-cities-dryer-vent.netlify.app/dryer-vent-cleaning.html
-- https://twin-cities-dryer-vent.netlify.app/roof-dryer-vent-cleaning.html
-- https://twin-cities-dryer-vent.netlify.app/wall-dryer-vent-cleaning.html
-- https://twin-cities-dryer-vent.netlify.app/bird-nest-in-dryer-vent.html
-- https://twin-cities-dryer-vent.netlify.app/dryer-vent-inspection.html
-- https://twin-cities-dryer-vent.netlify.app/multi-family-dryer-vent-cleaning.html
-- https://twin-cities-dryer-vent.netlify.app/dryer-vent-cleaning-for-home-sale.html
-- https://twin-cities-dryer-vent.netlify.app/pricing.html
-- https://twin-cities-dryer-vent.netlify.app/how-it-works.html
-- https://twin-cities-dryer-vent.netlify.app/service-area.html
-- https://twin-cities-dryer-vent.netlify.app/dryer-vent-cleaning-minneapolis.html
-- https://twin-cities-dryer-vent.netlify.app/dryer-vent-cleaning-st-paul.html
-- https://twin-cities-dryer-vent.netlify.app/dryer-vent-cleaning-bloomington.html
-- https://twin-cities-dryer-vent.netlify.app/dryer-vent-cleaning-edina.html
-- https://twin-cities-dryer-vent.netlify.app/dryer-vent-cleaning-eden-prairie.html
-- https://twin-cities-dryer-vent.netlify.app/dryer-vent-cleaning-minnetonka.html
-- https://twin-cities-dryer-vent.netlify.app/dryer-vent-cleaning-plymouth.html
-- https://twin-cities-dryer-vent.netlify.app/dryer-vent-cleaning-maple-grove.html
-- https://twin-cities-dryer-vent.netlify.app/dryer-vent-cleaning-woodbury.html
-- https://twin-cities-dryer-vent.netlify.app/dryer-vent-cleaning-eagan.html
-- https://twin-cities-dryer-vent.netlify.app/dryer-vent-cleaning-burnsville.html
-- https://twin-cities-dryer-vent.netlify.app/dryer-vent-cleaning-apple-valley.html
-- https://twin-cities-dryer-vent.netlify.app/dryer-vent-cleaning-lakeville.html
-- https://twin-cities-dryer-vent.netlify.app/dryer-vent-cleaning-roseville.html
-- https://twin-cities-dryer-vent.netlify.app/dryer-vent-cleaning-blaine.html
-- https://twin-cities-dryer-vent.netlify.app/dryer-vent-cleaning-coon-rapids.html
-- https://twin-cities-dryer-vent.netlify.app/dryer-vent-cleaning-brooklyn-park.html
-- https://twin-cities-dryer-vent.netlify.app/dryer-vent-cleaning-st-louis-park.html
-- https://twin-cities-dryer-vent.netlify.app/dryer-vent-cleaning-richfield.html
-- https://twin-cities-dryer-vent.netlify.app/dryer-vent-cleaning-golden-valley.html
-- https://twin-cities-dryer-vent.netlify.app/dryer-vent-cleaning-chanhassen.html
-- https://twin-cities-dryer-vent.netlify.app/dryer-vent-cleaning-chaska.html
-- https://twin-cities-dryer-vent.netlify.app/dryer-vent-cleaning-shakopee.html
-- https://twin-cities-dryer-vent.netlify.app/dryer-vent-cleaning-savage.html
-- https://twin-cities-dryer-vent.netlify.app/dryer-vent-cleaning-prior-lake.html
-- https://twin-cities-dryer-vent.netlify.app/dryer-vent-cleaning-inver-grove-heights.html
-- https://twin-cities-dryer-vent.netlify.app/dryer-vent-cleaning-cottage-grove.html
-- https://twin-cities-dryer-vent.netlify.app/dryer-vent-cleaning-maplewood.html
-- https://twin-cities-dryer-vent.netlify.app/dryer-vent-cleaning-oakdale.html
-- https://twin-cities-dryer-vent.netlify.app/dryer-vent-cleaning-white-bear-lake.html
-- https://twin-cities-dryer-vent.netlify.app/dryer-vent-cleaning-stillwater.html
-- https://twin-cities-dryer-vent.netlify.app/dryer-vent-cleaning-hopkins.html
-- https://twin-cities-dryer-vent.netlify.app/dryer-vent-cleaning-wayzata.html
-- https://twin-cities-dryer-vent.netlify.app/dryer-vent-cleaning-champlin.html
-- https://twin-cities-dryer-vent.netlify.app/dryer-vent-cleaning-andover.html
-- https://twin-cities-dryer-vent.netlify.app/dryer-vent-cleaning-rosemount.html
-- https://twin-cities-dryer-vent.netlify.app/dryer-vent-cleaning-farmington.html
-- https://twin-cities-dryer-vent.netlify.app/faq.html
-- https://twin-cities-dryer-vent.netlify.app/blog.html
+- https://clearventmn.com/
+- https://clearventmn.com/book
+- https://clearventmn.com/services
+- https://clearventmn.com/dryer-vent-cleaning
+- https://clearventmn.com/roof-dryer-vent-cleaning
+- https://clearventmn.com/wall-dryer-vent-cleaning
+- https://clearventmn.com/bird-nest-in-dryer-vent
+- https://clearventmn.com/dryer-vent-inspection
+- https://clearventmn.com/multi-family-dryer-vent-cleaning
+- https://clearventmn.com/dryer-vent-cleaning-for-home-sale
+- https://clearventmn.com/pricing
+- https://clearventmn.com/how-it-works
+- https://clearventmn.com/service-area
+- https://clearventmn.com/dryer-vent-cleaning-minneapolis
+- https://clearventmn.com/dryer-vent-cleaning-st-paul
+- https://clearventmn.com/dryer-vent-cleaning-bloomington
+- https://clearventmn.com/dryer-vent-cleaning-edina
+- https://clearventmn.com/dryer-vent-cleaning-eden-prairie
+- https://clearventmn.com/dryer-vent-cleaning-minnetonka
+- https://clearventmn.com/dryer-vent-cleaning-plymouth
+- https://clearventmn.com/dryer-vent-cleaning-maple-grove
+- https://clearventmn.com/dryer-vent-cleaning-woodbury
+- https://clearventmn.com/dryer-vent-cleaning-eagan
+- https://clearventmn.com/dryer-vent-cleaning-burnsville
+- https://clearventmn.com/dryer-vent-cleaning-apple-valley
+- https://clearventmn.com/dryer-vent-cleaning-lakeville
+- https://clearventmn.com/dryer-vent-cleaning-roseville
+- https://clearventmn.com/dryer-vent-cleaning-blaine
+- https://clearventmn.com/dryer-vent-cleaning-coon-rapids
+- https://clearventmn.com/dryer-vent-cleaning-brooklyn-park
+- https://clearventmn.com/dryer-vent-cleaning-st-louis-park
+- https://clearventmn.com/dryer-vent-cleaning-richfield
+- https://clearventmn.com/dryer-vent-cleaning-golden-valley
+- https://clearventmn.com/dryer-vent-cleaning-chanhassen
+- https://clearventmn.com/dryer-vent-cleaning-chaska
+- https://clearventmn.com/dryer-vent-cleaning-shakopee
+- https://clearventmn.com/dryer-vent-cleaning-savage
+- https://clearventmn.com/dryer-vent-cleaning-prior-lake
+- https://clearventmn.com/dryer-vent-cleaning-inver-grove-heights
+- https://clearventmn.com/dryer-vent-cleaning-cottage-grove
+- https://clearventmn.com/dryer-vent-cleaning-maplewood
+- https://clearventmn.com/dryer-vent-cleaning-oakdale
+- https://clearventmn.com/dryer-vent-cleaning-white-bear-lake
+- https://clearventmn.com/dryer-vent-cleaning-stillwater
+- https://clearventmn.com/dryer-vent-cleaning-hopkins
+- https://clearventmn.com/dryer-vent-cleaning-wayzata
+- https://clearventmn.com/dryer-vent-cleaning-champlin
+- https://clearventmn.com/dryer-vent-cleaning-andover
+- https://clearventmn.com/dryer-vent-cleaning-rosemount
+- https://clearventmn.com/dryer-vent-cleaning-farmington
+- https://clearventmn.com/faq
+- https://clearventmn.com/blog
 
 ## FAQ (119 questions)
-https://twin-cities-dryer-vent.netlify.app/faq.html
+https://clearventmn.com/faq
 - Q: What is dryer vent cleaning?
   A: Dryer vent cleaning is the removal of lint and debris from the entire duct that runs from the back of your dryer to the vent cap outside your home. We use a rotating brush system and a high-powered vacuum to scrub the full length of the duct, clear the exterior cap, and verify airflow afterward. It is different from cleaning the lint screen, which only catches a portion of the lint your dryer produces.
 - Q: How often should a dryer vent be cleaned?

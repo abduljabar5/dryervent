@@ -1,4 +1,4 @@
-# Twin Cities Dryer Vent Pros
+# Clear Vent (clearventmn.com)
 
 Static marketing + booking site for a dryer vent cleaning business serving Minneapolis–Saint Paul. Hosted on Cloudflare Pages; booking processing runs in Pages Functions with a KV namespace.
 

@@ -6,9 +6,9 @@ const esc = (s = '') => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').r
 const money = (n) => '$' + Number(n || 0).toLocaleString('en-US');
 let ENV = {};
 const cfg = (k, d = '') => ENV[k] || d;
-const BRAND = () => cfg('BRAND_NAME', 'Twin Cities Dryer Vent Pros');
+const BRAND = () => cfg('BRAND_NAME', 'Clear Vent');
 const PHONE = () => cfg('BRAND_PHONE', '(612) 555-0147');
-const SITE_URL = () => cfg('SITE_URL', 'https://twin-cities-dryer-vent.pages.dev');
+const SITE_URL = () => cfg('SITE_URL', 'https://clearventmn.com');
 
 async function sendEmail({ to, subject, html, text, replyTo }) {
   const key = cfg('RESEND_API_KEY'), from = cfg('RESEND_FROM_EMAIL');

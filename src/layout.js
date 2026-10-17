@@ -2,7 +2,8 @@ import { SITE, PRICING, NAV } from './data/site.js';
 
 export const esc = (s = '') => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 export const money = (n) => '$' + Number(n).toLocaleString('en-US');
-export const url = (path) => SITE.domain + (path.startsWith('/') ? path : '/' + path);
+export const clean = (path) => path.replace(/\/index\.html$/, '/').replace(/\.html(?=$|[?#])/, '');
+export const url = (path) => SITE.domain + clean(path.startsWith('/') ? path : '/' + path);
 
 // ---------------------------------------------------------------------------
 // Inline SVG illustrations (also used by the animated booking step)
@@ -155,7 +156,7 @@ export const articleSchema = (a) => ({
   '@context': 'https://schema.org', '@type': 'Article',
   headline: a.title, description: a.description, datePublished: a.date, dateModified: a.date,
   author: { '@type': 'Organization', name: SITE.name }, publisher: { '@id': url('/#business') },
-  mainEntityOfPage: url('/blog/' + a.slug + '.html'), image: url('/images/og.png')
+  mainEntityOfPage: url('/blog/' + a.slug), image: url('/images/og.png')
 });
 
 export const speakable = (selectors) => ({ '@context': 'https://schema.org', '@type': 'WebPage', speakable: { '@type': 'SpeakableSpecification', cssSelector: selectors } });
@@ -259,7 +260,7 @@ function navHtml(active = '') {
   <div class="container nav-inner">
     <a href="/" class="brand" aria-label="${esc(SITE.name)} home">
       <svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="currentColor"/><path d="M12 28V15l8-6 8 6v13" fill="none" stroke="#fff" stroke-width="2.6" stroke-linejoin="round"/><path d="M20 28v-7" stroke="#fff" stroke-width="2.6"/><circle cx="20" cy="17" r="2.2" fill="#fff"/></svg>
-      <span class="brand-text"><span class="brand-name">${esc(SITE.shortName)}</span><span class="brand-sub">Twin Cities · Flat-rate</span></span>
+      <span class="brand-text"><span class="brand-name">${esc(SITE.shortName)}</span><span class="brand-sub">Dryer vent cleaning · Twin Cities</span></span>
     </a>
     <nav class="site-nav" id="site-nav" aria-label="Main">
       <ul>
@@ -324,9 +325,9 @@ function footerHtml(cities, services) {
 // Page shell
 // ---------------------------------------------------------------------------
 export function page({ path, title, description, keywords = '', body, schema = [], bodyClass = '', active = '', extraHead = '', scripts = '', noindex = false, cities = [], services = [], ogType = 'website', hideStickyBook = false }) {
-  const canonical = url(path === '/index.html' ? '/' : path);
+  const canonical = url(path);
   const schemas = [businessSchema(), ...schema].map(s => `<script type="application/ld+json">${JSON.stringify(s)}</script>`).join('\n');
-  return `<!DOCTYPE html>
+  const out = `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -370,4 +371,5 @@ ${footerHtml(cities, services)}
 ${scripts}
 </body>
 </html>`;
+  return out.replace(/href="(\/[^"]*?)\.html(?=["?#])/g, 'href="$1').replace(/href="\/index"/g, 'href="/"').replace(/href="\/index(?=[?#])/g, 'href="/');
 }

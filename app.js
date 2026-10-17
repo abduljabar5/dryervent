@@ -275,7 +275,7 @@
         if (!r.ok) throw new Error('Server responded ' + r.status);
         sessionStorage.setItem('dvp_last_booking', JSON.stringify(payload));
         localStorage.removeItem(KEY);
-        location.href = '/confirmation.html?c=' + encodeURIComponent(confirmationNumber);
+        location.href = '/confirmation?c=' + encodeURIComponent(confirmationNumber);
       } catch (ex) {
         // Fallback: still show confirmation page but flag that we'll call to confirm, and open an email draft
         sessionStorage.setItem('dvp_last_booking', JSON.stringify({ ...payload, offline: true }));

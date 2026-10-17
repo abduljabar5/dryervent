@@ -7,9 +7,9 @@ pages_build_output_dir = "."
 # then paste the id below.
 [[kv_namespaces]]
 binding = "BOOKINGS"
-id = "REPLACE_WITH_KV_ID"
+id = "3e717e6a26ca498dbf9e7c67c42aa72f"
 
 [vars]
-BRAND_NAME = "Twin Cities Dryer Vent Pros"
+BRAND_NAME = "Clear Vent"
 BRAND_PHONE = "(612) 555-0147"
-SITE_URL = "https://twin-cities-dryer-vent.pages.dev"
+SITE_URL = "https://clearventmn.com"
