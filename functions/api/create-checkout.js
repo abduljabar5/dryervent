@@ -1,9 +1,11 @@
 // POST /api/create-checkout { confirmationNumber } -> { url } (Stripe Checkout, hosted page)
 // Customers pay the booked total online, any time before or after the visit. No deposit is required.
 import { stripe, json, normConf, amountDue } from './_stripe.js';
+import { clientIp, rateLimit } from './_guard.js';
 
 export async function onRequestPost({ request, env }) {
   if (!env.STRIPE_SECRET_KEY) return json(503, { error: 'Online payment is not set up yet. Please pay on completion.' });
+  if (!(await rateLimit(env, `checkout:${clientIp(request)}`, 15, 3600))) return json(429, { error: 'Too many attempts. Please try again later or pay on completion.' });
   let body; try { body = await request.json(); } catch { return json(400, { error: 'Invalid JSON' }); }
   const conf = normConf(body.confirmationNumber);
   if (!/^DV-[A-Z0-9]{4,8}$/.test(conf)) return json(400, { error: 'Enter a confirmation number like DV-7K2QX.' });

@@ -1,13 +1,13 @@
 // POST /api/update-booking — owner-only edits from /admin: final amount, status, payment method.
 // Requires Authorization: Bearer <ADMIN_TOKEN>.
 import { json, normConf } from './_stripe.js';
+import { adminAuth } from './_guard.js';
 
 const STATUSES = new Set(['new', 'done', 'paid', 'cancelled']);
 const METHODS = new Set(['cash', 'zelle', 'venmo', 'card-in-person', 'stripe', '']);
 
 export async function onRequestPost({ request, env }) {
-  const token = (request.headers.get('authorization') || '').replace(/^Bearer\s+/i, '');
-  if (!env.ADMIN_TOKEN || token !== env.ADMIN_TOKEN) return json(401, { error: 'Unauthorized' });
+  const denied = await adminAuth(request, env); if (denied) return denied;
   let body; try { body = await request.json(); } catch { return json(400, { error: 'Invalid JSON' }); }
   const conf = normConf(body.confirmationNumber);
   const key = 'booking:' + conf;

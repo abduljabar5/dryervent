@@ -328,10 +328,16 @@
       };
       try {
         const r = await fetch('/api/process-booking', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-        if (!r.ok) throw new Error('Server responded ' + r.status);
-        sessionStorage.setItem('dvp_last_booking', JSON.stringify(payload));
+        const out = await r.json().catch(() => ({}));
+        if (!r.ok) {
+          if (r.status === 400 && Array.isArray(out.fields)) { out.fields.forEach(f => show(f, true)); go(f2step(out.fields[0])); submitBtn.disabled = false; if (mobileNext) mobileNext.disabled = false; submitBtn.textContent = 'Confirm booking'; return; }
+          if (r.status === 429) { err.hidden = false; err.textContent = out.error || 'Too many requests. Please call or text us.'; submitBtn.disabled = false; if (mobileNext) mobileNext.disabled = false; submitBtn.textContent = 'Confirm booking'; return; }
+          throw new Error('Server responded ' + r.status);
+        }
+        const saved = { ...payload, ...(out.booking || {}), confirmationNumber: out.confirmationNumber || confirmationNumber };
+        sessionStorage.setItem('dvp_last_booking', JSON.stringify(saved));
         localStorage.removeItem(KEY);
-        location.href = '/confirmation?c=' + encodeURIComponent(confirmationNumber);
+        location.href = '/confirmation?c=' + encodeURIComponent(saved.confirmationNumber);
       } catch (ex) {
         // Fallback: still show confirmation page but flag that we'll call to confirm, and open an email draft
         sessionStorage.setItem('dvp_last_booking', JSON.stringify({ ...payload, offline: true }));
@@ -339,6 +345,7 @@
         submitBtn.disabled = false; if (mobileNext) mobileNext.disabled = false; submitBtn.textContent = 'Confirm booking';
       }
     });
+    function f2step(f) { return f === 'ventLocation' ? 1 : ['date', 'window', 'address', 'city', 'zip'].includes(f) ? 3 : 4; }
     function formatPhone(p) { const d = digits(p).replace(/^1(?=\d{10}$)/, ''); return d.length === 10 ? `(${d.slice(0, 3)}) ${d.slice(3, 6)}-${d.slice(6)}` : p; }
     function mailto(b) { const body = `Booking request ${b.confirmationNumber}%0A${b.ventLabel}%0A${b.dateLabel} ${b.window}%0A${b.address}, ${b.city} ${b.zip}%0A${b.name} ${b.phone}%0ATotal ${money(b.total)}`; return `mailto:?subject=Dryer vent cleaning request&body=${body}`; }
 

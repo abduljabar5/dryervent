@@ -1,7 +1,9 @@
 // GET /api/booking-lookup?c=DV-XXXXX -> a minimal, non-sensitive summary for the pay page.
 import { json, normConf, amountDue } from './_stripe.js';
+import { clientIp, rateLimit } from './_guard.js';
 
 export async function onRequestGet({ request, env }) {
+  if (!(await rateLimit(env, `lookup:${clientIp(request)}`, 30, 3600))) return json(429, { error: 'Too many lookups. Please try again later or call us.' });
   const conf = normConf(new URL(request.url).searchParams.get('c'));
   if (!/^DV-[A-Z0-9]{4,8}$/.test(conf)) return json(400, { error: 'Enter a confirmation number like DV-7K2QX.' });
   const raw = await env.BOOKINGS.get('booking:' + conf);

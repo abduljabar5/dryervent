@@ -2,6 +2,8 @@
 // Stores in KV (binding BOOKINGS), emails customer + owner via Resend, texts via Twilio (all optional — degrade gracefully).
 
 import { customerBookingEmail, ownerBookingEmail, contactEmail } from './_email.js';
+import { PRICING } from '../../src/data/site.js';
+import { clientIp, rateLimit, clean, cleanMultiline, isEmail, usE164 } from './_guard.js';
 
 const json = (status, body) => new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
 const esc = (s = '') => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -33,7 +35,7 @@ async function sendSms(to, body) {
   return { status: r.ok ? 'sent' : 'failed', code: r.status };
 }
 
-const e164 = (p) => { const d = String(p || '').replace(/\D/g, '').replace(/^1(?=\d{10}$)/, ''); return d.length === 10 ? '+1' + d : null; };
+const e164 = usE164;
 
 const emailCtx = () => ({ brand: BRAND(), phone: PHONE(), siteUrl: SITE_URL(), email: cfg('BRAND_EMAIL', 'hello@clearventmn.com') });
 
@@ -73,22 +75,84 @@ async function handleContact(m) {
   return results;
 }
 
+// ---- Validation: the server is the source of truth for prices, labels and the confirmation number. ----
+const WINDOWS = new Set(PRICING.windows);
+const ADDONS = new Map(PRICING.addons.map((a) => [a.id, a]));
+const SYMPTOMS = new Set(['Takes 2 cycles to dry', 'Dryer runs hot', 'Burning smell', 'Lint around outside vent', "Flapper doesn't open", 'Hear birds / chirping', 'Just maintenance']);
+const fmtDate = (iso) => new Date(`${iso}T12:00:00Z`).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+const isIsoDate = (s) => /^\d{4}-\d{2}-\d{2}$/.test(s) && !Number.isNaN(Date.parse(`${s}T12:00:00Z`));
+
+async function newConfirmation() {
+  const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  for (let tries = 0; tries < 5; tries++) {
+    const bytes = crypto.getRandomValues(new Uint8Array(5));
+    const conf = 'DV-' + [...bytes].map((b) => alphabet[b % alphabet.length]).join('');
+    if (!ENV.BOOKINGS || !(await ENV.BOOKINGS.get('booking:' + conf))) return conf;
+  }
+  throw new Error('Could not allocate a confirmation number');
+}
+
+function validateBooking(body) {
+  const errors = [];
+  const ventLocation = clean(body.ventLocation, 20);
+  if (!PRICING.base[ventLocation]) errors.push('ventLocation');
+  const window = clean(body.window, 40);
+  if (!WINDOWS.has(window)) errors.push('window');
+  const date = clean(body.date, 10);
+  const today = new Date(); today.setUTCHours(0, 0, 0, 0);
+  const max = new Date(today); max.setUTCDate(max.getUTCDate() + 90);
+  if (!isIsoDate(date) || Date.parse(`${date}T12:00:00Z`) < today.getTime() - 86400000 || Date.parse(`${date}T12:00:00Z`) > max.getTime()) errors.push('date');
+  const name = clean(body.name, 80); if (name.length < 2) errors.push('name');
+  const email = clean(body.email, 254).toLowerCase(); if (!isEmail(email)) errors.push('email');
+  const phoneE164 = usE164(body.phone); if (!phoneE164) errors.push('phone');
+  const address = clean(body.address, 120); if (address.length < 4) errors.push('address');
+  const city = clean(body.city, 60); if (city.length < 2) errors.push('city');
+  const zip = clean(body.zip, 10); if (!/^\d{5}(-\d{4})?$/.test(zip)) errors.push('zip');
+  if (errors.length) return { errors };
+
+  const addonIds = [...new Set((Array.isArray(body.addons) ? body.addons : []).map((a) => clean(a, 20)).filter((id) => ADDONS.has(id)))];
+  const addonItems = addonIds.map((id) => ({ id, label: ADDONS.get(id).label, price: ADDONS.get(id).price }));
+  const basePrice = PRICING.base[ventLocation].price;
+  const total = basePrice + addonItems.reduce((s, a) => s + a.price, 0);
+  const d = phoneE164.slice(2);
+  const booking = {
+    type: 'booking', ventLocation, ventLabel: PRICING.base[ventLocation].label, basePrice,
+    addons: addonIds, addonItems, addonLabels: addonItems.map((a) => a.label), total,
+    date, dateLabel: fmtDate(date), window, flexible: body.flexible === true || body.flexible === 'yes',
+    name, email, phone: `(${d.slice(0, 3)}) ${d.slice(3, 6)}-${d.slice(6)}`, address, city, zip,
+    unit: clean(body.unit, 20), dryerType: clean(body.dryerType, 40), dryerAge: clean(body.dryerAge, 40), homeType: clean(body.homeType, 40),
+    symptoms: (Array.isArray(body.symptoms) ? body.symptoms : []).map((x) => clean(x, 60)).filter((x) => SYMPTOMS.has(x)).slice(0, 10),
+    access: cleanMultiline(body.access, 500), notes: cleanMultiline(body.notes, 1000), heard: clean(body.heard, 40),
+    smsOk: body.smsOk === true || body.smsOk === 'yes', source: clean(body.source, 200), createdAt: new Date().toISOString()
+  };
+  return { booking };
+}
+
 export async function onRequestPost({ request, env }) {
   ENV = env || {};
   const req = request;
+  const ip = clientIp(req);
   let body; try { body = await req.json(); } catch { return json(400, { error: 'Invalid JSON' }); }
+  if (!body || typeof body !== 'object') return json(400, { error: 'Invalid JSON' });
+  // Honeypot: real browsers leave this hidden field empty. Bots get a quiet "success".
+  if (body.website) return json(200, { success: true, confirmationNumber: 'DV-' + Math.random().toString(36).slice(2, 7).toUpperCase() });
+  if (!(await rateLimit(env, `ip:${ip}`, 20, 3600))) return json(429, { error: 'Too many requests from your network. Please call or text us instead.' });
   try {
     if (body.type === 'contact') {
-      if (!body.name || !body.message || (!body.email && !body.phone)) return json(400, { error: 'Missing fields' });
-      return json(200, { success: true, results: await handleContact(body) });
+      const m = { type: 'contact', name: clean(body.name, 80), email: clean(body.email, 254).toLowerCase(), phone: clean(body.phone, 30), message: cleanMultiline(body.message, 2000), receivedAt: new Date().toISOString() };
+      if (m.email && !isEmail(m.email)) return json(400, { error: 'Please enter a valid email.' });
+      if (!m.name || !m.message || (!m.email && !m.phone)) return json(400, { error: 'Missing fields' });
+      return json(200, { success: true, results: await handleContact(m) });
     }
-    const required = ['confirmationNumber', 'ventLocation', 'date', 'window', 'address', 'city', 'zip', 'name', 'phone', 'email'];
-    const missing = required.filter(k => !body[k]);
-    if (missing.length) return json(400, { error: 'Missing required fields', missing });
-    const results = await handleBooking(body);
-    return json(200, { success: true, confirmationNumber: body.confirmationNumber, results });
+    const { booking, errors } = validateBooking(body);
+    if (errors) return json(400, { error: 'Please check the highlighted fields.', fields: errors });
+    const phoneKey = usE164(booking.phone);
+    if (!(await rateLimit(env, `phone:${phoneKey}`, 3, 86400))) return json(429, { error: 'This phone number has already booked several times today. Please call or text us.' });
+    booking.confirmationNumber = await newConfirmation();
+    const results = await handleBooking(booking);
+    return json(200, { success: true, confirmationNumber: booking.confirmationNumber, booking, results });
   } catch (err) {
     console.error('process-booking error', err);
-    return json(500, { error: err.message });
+    return json(500, { error: 'Something went wrong on our side. Please call or text us.' });
   }
 }

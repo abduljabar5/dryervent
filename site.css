@@ -423,3 +423,6 @@ input.invalid, select.invalid { border-color: var(--warn); }
 @media (max-width: 420px) { .brand-name { font-size: 1rem; } .brand-mark { width: 32px; height: 32px; } }
 
 @media (max-width: 900px) { .hero-house .ill-label { font-size: 20px; } .hero-house .ill-label-strong { font-size: 22px; } }
+
+/* Honeypot field for bots; invisible to people and screen readers. */
+.hp{position:absolute!important;left:-9999px;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none}

@@ -226,6 +226,7 @@ function booking() {
       </ol>
 
       <form id="booking-form" novalidate autocomplete="on">
+        <div class="hp" aria-hidden="true"><label for="bk-website">Website</label><input type="text" id="bk-website" name="website" tabindex="-1" autocomplete="off"></div>
         <!-- STEP 1: vent location -->
         <fieldset class="bk-step" data-step="1">
           <legend class="h3">Where does your dryer vent exit the house?</legend>
@@ -667,6 +668,7 @@ ${ctaBand()}`,
 </div>
 <div class="reveal">
   <form class="contact-form" id="contact-form" action="/api/process-booking" method="post" data-contact>
+    <div class="hp" aria-hidden="true"><label for="ct-website">Website</label><input type="text" id="ct-website" name="website" tabindex="-1" autocomplete="off"></div>
     <h2 class="h3">Send a message</h2>
     <div class="field"><label for="c-name">Name</label><input id="c-name" name="name" required></div>
     <div class="field-row"><div class="field"><label for="c-phone">Phone</label><input id="c-phone" name="phone" type="tel" required></div><div class="field"><label for="c-email">Email</label><input id="c-email" name="email" type="email" required></div></div>
