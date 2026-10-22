@@ -38,7 +38,7 @@
   const heroHouse = $('#hero-house');
   if (heroHouse) {
     const btns = $$('[data-hero-vent]');
-    let auto = true, state = 'roof';
+    let auto = true, state = 'ground';
     const set = (v) => { state = v; heroHouse.dataset.vent = v; btns.forEach(b => b.classList.toggle('active', b.dataset.heroVent === v)); };
     btns.forEach(b => b.addEventListener('click', () => { auto = false; set(b.dataset.heroVent); }));
     if (!reduced) setInterval(() => { if (auto) set(state === 'roof' ? 'ground' : 'roof'); }, 4500);

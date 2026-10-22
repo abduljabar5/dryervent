@@ -24,6 +24,28 @@ export const SERVICES = [
     related: ['roof-dryer-vent-cleaning','wall-dryer-vent-cleaning','dryer-vent-inspection']
   },
   {
+    slug: 'wall-dryer-vent-cleaning', name: 'Wall & Ground-Level Vent Cleaning', short: 'Vents that exit a side wall',
+    title: 'Wall & Ground-Level Dryer Vent Cleaning | $139 | Twin Cities',
+    description: 'Dryer vent cleaning for wall and ground-level vents in Minneapolis–St. Paul. Full duct cleaned, cap cleared, flapper fixed, snow and shrub clearance checked. $139 flat. Book online.',
+    keywords: 'wall dryer vent cleaning, ground level dryer vent, basement dryer vent cleaning, dryer vent flap stuck, outdoor dryer vent clogged',
+    h1: 'Wall & Ground-Level Dryer Vent Cleaning',
+    lead: 'Basement or main-floor laundry? Your vent exits through a side wall, usually a few feet off the ground. We clean the full run, free the flapper, clear lint from the cap, and make sure snow and shrubs aren\'t blocking it. $139 flat.',
+    answer: 'A wall or ground-level dryer vent exits through the side of the house, typically 1–4 feet above grade for basement laundry rooms. Clear Vent cleans these for a flat $139: the full duct is brushed and vacuumed from inside, the exterior hood is cleared, the flapper is freed, and any screen is removed. These vents are also checked for snow-drift and shrub clearance, which block low vents in Minnesota winters.',
+    priceKey: 'ground', faqTags: ['ground','signs'],
+    sections: [
+      { h: 'Common problems with wall vents', items: [
+        'Flapper stuck shut with lint or stuck open letting cold air in',
+        'Shrubs, mulch or snow drifts packed against the hood',
+        'Window screen added by a previous owner, now matted solid',
+        'Long basement runs with 3–5 elbows across the joists',
+        'Crushed foil transition hose behind the dryer'
+      ]},
+      { h: 'Our process for wall vents', p: 'We pull the dryer, disconnect the hose, attach the vacuum and run the rotary brush the full length to the cap. Outside we clear the hood, test the flapper and remove screens. We reconnect and seal the hose, run the dryer and verify exhaust velocity at the cap.' },
+      { h: 'Minnesota snow fix', p: 'Low vents get buried by drifts and snowblower spray. We offer a vent extension or periscope cap that raises the outlet above typical drift height, so you\'re not shoveling out your dryer vent in January.' }
+    ],
+    related: ['dryer-vent-cleaning','roof-dryer-vent-cleaning','dryer-vent-inspection']
+  },
+  {
     slug: 'roof-dryer-vent-cleaning', name: 'Roof Dryer Vent Cleaning', short: 'Vents that exit through the roof',
     title: 'Roof Dryer Vent Cleaning Twin Cities | $199 Flat Rate, Cap Cleared',
     description: 'Roof dryer vent cleaning in Minneapolis–St. Paul. We clear the roof cap, remove nests and screens, and clean the vertical run from both ends. $199 flat, no trip charge. Book online.',
@@ -45,28 +67,6 @@ export const SERVICES = [
       { h: 'Upgrade the cap while we\'re up there', p: 'For $89 we replace a screened or broken roof cap with a dryer-specific pest-guard cap: large hood, free-swinging damper, no screen. It keeps birds out without trapping lint and extends the time between cleanings.' }
     ],
     related: ['dryer-vent-cleaning','bird-nest-in-dryer-vent','wall-dryer-vent-cleaning']
-  },
-  {
-    slug: 'wall-dryer-vent-cleaning', name: 'Wall & Ground-Level Vent Cleaning', short: 'Vents that exit a side wall',
-    title: 'Wall & Ground-Level Dryer Vent Cleaning | $139 | Twin Cities',
-    description: 'Dryer vent cleaning for wall and ground-level vents in Minneapolis–St. Paul. Full duct cleaned, cap cleared, flapper fixed, snow and shrub clearance checked. $139 flat. Book online.',
-    keywords: 'wall dryer vent cleaning, ground level dryer vent, basement dryer vent cleaning, dryer vent flap stuck, outdoor dryer vent clogged',
-    h1: 'Wall & Ground-Level Dryer Vent Cleaning',
-    lead: 'Basement or main-floor laundry? Your vent exits through a side wall, usually a few feet off the ground. We clean the full run, free the flapper, clear lint from the cap, and make sure snow and shrubs aren\'t blocking it. $139 flat.',
-    answer: 'A wall or ground-level dryer vent exits through the side of the house, typically 1–4 feet above grade for basement laundry rooms. Clear Vent cleans these for a flat $139: the full duct is brushed and vacuumed from inside, the exterior hood is cleared, the flapper is freed, and any screen is removed. These vents are also checked for snow-drift and shrub clearance, which block low vents in Minnesota winters.',
-    priceKey: 'ground', faqTags: ['ground','signs'],
-    sections: [
-      { h: 'Common problems with wall vents', items: [
-        'Flapper stuck shut with lint or stuck open letting cold air in',
-        'Shrubs, mulch or snow drifts packed against the hood',
-        'Window screen added by a previous owner, now matted solid',
-        'Long basement runs with 3–5 elbows across the joists',
-        'Crushed foil transition hose behind the dryer'
-      ]},
-      { h: 'Our process for wall vents', p: 'We pull the dryer, disconnect the hose, attach the vacuum and run the rotary brush the full length to the cap. Outside we clear the hood, test the flapper and remove screens. We reconnect and seal the hose, run the dryer and verify exhaust velocity at the cap.' },
-      { h: 'Minnesota snow fix', p: 'Low vents get buried by drifts and snowblower spray. We offer a vent extension or periscope cap that raises the outlet above typical drift height, so you\'re not shoveling out your dryer vent in January.' }
-    ],
-    related: ['dryer-vent-cleaning','roof-dryer-vent-cleaning','dryer-vent-inspection']
   },
   {
     slug: 'bird-nest-in-dryer-vent', name: 'Bird Nest & Pest Removal', short: 'Nests, debris and pest-proof caps',

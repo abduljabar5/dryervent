@@ -45,13 +45,13 @@ function home() {
       </ul>
     </div>
     <div class="hero-art reveal">
-      <div class="hero-house" id="hero-house">
+      <div class="hero-house" id="hero-house" data-vent="ground">
         ${houseSvg('roof', { id: 'hero-roof' })}
         ${houseSvg('ground', { id: 'hero-ground' })}
       </div>
       <div class="hero-toggle" role="group" aria-label="Vent type">
-        <button type="button" class="active" data-hero-vent="roof">Roof vent</button>
-        <button type="button" data-hero-vent="ground">Wall vent</button>
+        <button type="button" class="active" data-hero-vent="ground">Wall vent</button>
+        <button type="button" data-hero-vent="roof">Roof vent</button>
       </div>
     </div>
   </div>
