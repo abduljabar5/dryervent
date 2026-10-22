@@ -50,7 +50,13 @@
     const steps = $$('.story-step');
     const badge = $('#story-badge');
     const labels = { 1: 'Lint gets past the screen', 2: 'A gallon a year', 3: 'Heat has nowhere to go', 4: 'Cleared. Airflow restored.' };
-    const activate = (n) => { scene.dataset.state = n; if (badge) badge.textContent = labels[n]; steps.forEach(s => s.classList.toggle('active', s.dataset.step === String(n))); };
+    let fixPlayed = false;
+    const activate = (n) => {
+      scene.dataset.state = n; if (badge) badge.textContent = labels[n];
+      steps.forEach(s => s.classList.toggle('active', s.dataset.step === String(n)));
+      if (String(n) === '4' && !fixPlayed) { fixPlayed = true; $$('[data-play]', scene).forEach(el => { try { el.beginElement(); } catch {} }); }
+      if (String(n) !== '4') fixPlayed = false;
+    };
     if ('IntersectionObserver' in window) {
       const io = new IntersectionObserver((entries) => {
         entries.forEach(en => { if (en.isIntersecting) activate(en.target.dataset.step); });

@@ -123,9 +123,9 @@ p { margin: 0 0 1em; }
 .ill-label-strong { fill: var(--accent); font-size: 17px; }
 .house-compact .ill-label, .vent-ill .ill-label { font-size: 26px; }
 .house-compact .ill-label-strong, .vent-ill .ill-label-strong { font-size: 30px; }
-.exit-ring { fill: none; stroke: var(--accent); stroke-width: 3; opacity: .85; transform-origin: center; transform-box: fill-box; animation: ring 2.2s ease-out infinite; }
-@keyframes ring { 0% { transform: scale(.55); opacity: .9; } 100% { transform: scale(1.35); opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { .exit-ring { animation: none; opacity: .6; } .lint-puff, .exhaust { display: none; } }
+.exit-glow { transform-origin: center; transform-box: fill-box; animation: glow 2.8s ease-in-out infinite; }
+@keyframes glow { 0%, 100% { opacity: .55; transform: scale(.92); } 50% { opacity: 1; transform: scale(1.06); } }
+@media (prefers-reduced-motion: reduce) { .exit-glow { animation: none; opacity: .7; } .lint-fleck, .exhaust, .air-stream { display: none; } }
 
 /* Trust row */
 .trust-row { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
@@ -143,31 +143,57 @@ p { margin: 0 0 1em; }
 .story-svg { width: 100%; height: auto; }
 .s-dryer { fill: #e9eef2; }
 .s-drum { fill: #c9d6df; }
-.s-drum-inner { fill: #a8bac6; transform-origin: 150px 300px; animation: spin 5s linear infinite; }
+.s-drum-inner { transform-origin: 150px 300px; animation: spin 1.3s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 .s-heat { opacity: 0; transition: opacity .8s; }
-.story-scene[data-state="3"] .s-heat { opacity: 1; }
-.s-duct { fill: none; stroke: #7f95a3; stroke-width: 30; stroke-linecap: butt; }
+.story-scene[data-state="3"] .s-heat { opacity: 1; animation: heat-pulse 1.6s ease-in-out infinite; }
+@keyframes heat-pulse { 0%, 100% { opacity: .7; } 50% { opacity: 1; } }
+.s-duct { fill: none; stroke-width: 30; stroke-linecap: butt; }
+.s-ember { fill: none; stroke: #ff7a45; stroke-width: 26; stroke-linecap: round; opacity: 0; transition: opacity .8s; }
+.story-scene[data-state="3"] .s-ember { animation: ember 1.6s ease-in-out infinite; }
+@keyframes ember { 0%, 100% { opacity: .22; } 50% { opacity: .5; } }
+/* warm air moving through the duct: strong when clean, choked as lint builds, clean + teal after the fix */
+.s-air-stream { fill: none; stroke: #ffffff; stroke-width: 7; stroke-linecap: round; stroke-dasharray: 3 6; opacity: .28; animation: flow .9s linear infinite; transition: opacity .8s, stroke .8s; }
+@keyframes flow { to { stroke-dashoffset: -9; } }
+.story-scene[data-state="2"] .s-air-stream { opacity: .16; animation-duration: 1.4s; }
+.story-scene[data-state="3"] .s-air-stream { opacity: .08; animation-duration: 2.4s; }
+.story-scene[data-state="4"] .s-air-stream { opacity: .5; stroke: #9be7da; animation-duration: .6s; }
+.s-flecks { transition: opacity .6s; }
+.story-scene[data-state="3"] .s-flecks { opacity: .45; }
+.story-scene[data-state="4"] .s-flecks { opacity: 0; }
+/* fuzzy lint lining, thickening per stage */
 .s-lint { fill: none; stroke: #e7dfd0; stroke-linecap: round; opacity: 0; transition: opacity .9s ease, stroke-width .9s ease; }
-.s-lint-1 { stroke-width: 4; stroke-dasharray: 10 14; }
-.s-lint-2 { stroke-width: 9; stroke-dasharray: 18 10; }
-.s-lint-3 { stroke-width: 16; stroke-dasharray: 30 6; }
-.story-scene[data-state="1"] .s-lint-1 { opacity: .9; }
+.s-lint-1 { stroke-width: 5; stroke-dasharray: 14 5 9 3 20 4; }
+.s-lint-2 { stroke-width: 11; stroke-dasharray: 26 4 15 6 32 3; opacity: 0; }
+.s-lint-3 { stroke-width: 19; stroke-dasharray: 40 3 24 5 50 2; }
+.story-scene[data-state="1"] .s-lint-1 { opacity: .85; }
 .story-scene[data-state="2"] .s-lint-1, .story-scene[data-state="2"] .s-lint-2 { opacity: .95; }
 .story-scene[data-state="3"] .s-lint-1, .story-scene[data-state="3"] .s-lint-2, .story-scene[data-state="3"] .s-lint-3 { opacity: 1; }
-.s-clumps ellipse { fill: #efe8db; opacity: 0; transition: opacity .9s, transform .9s; transform-origin: center; transform-box: fill-box; transform: scale(.4); }
-.story-scene[data-state="2"] .s-clumps ellipse, .story-scene[data-state="3"] .s-clumps ellipse { opacity: 1; transform: scale(1); }
-.story-scene[data-state="3"] .s-clumps ellipse { fill: #f3c9a9; }
-.s-cap { fill: #a9b8c2; }
-.s-brush { transition: transform 1.4s cubic-bezier(.3,.7,.2,1), opacity .4s; transform: translateY(0); opacity: 0; }
+.story-scene[data-state="4"] .s-lint-1, .story-scene[data-state="4"] .s-lint-2, .story-scene[data-state="4"] .s-lint-3 { opacity: 1; transition: none; }
+.s-clumps path { fill: #efe8db; opacity: 0; transition: opacity .9s, transform .9s; transform-origin: center; transform-box: fill-box; transform: scale(.4); }
+.story-scene[data-state="2"] .s-clumps path, .story-scene[data-state="3"] .s-clumps path, .story-scene[data-state="4"] .s-clumps path { opacity: 1; transform: scale(1); }
+.story-scene[data-state="3"] .s-clumps path { fill: #f3c9a9; }
+.story-scene[data-state="4"] .s-clumps path { transition: none; }
+/* the fix: brush travels the duct (SMIL, started from JS), rod draws in, lint wipes away behind it */
+.s-wipe { stroke-dasharray: 1 1; stroke-dashoffset: 0; }
+.story-scene[data-state="4"] .s-wipe { animation: wipe 3s cubic-bezier(.4,0,.6,1) forwards; }
+@keyframes wipe { to { stroke-dashoffset: -1; } }
+.s-rod { fill: none; stroke: #ffffff; stroke-width: 5; stroke-linecap: round; stroke-dasharray: 1 1; stroke-dashoffset: 1; opacity: 0; }
+.story-scene[data-state="4"] .s-rod { opacity: .9; animation: draw 3s cubic-bezier(.4,0,.6,1) forwards; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+.s-brush { opacity: 0; transition: opacity .3s; }
 .story-scene[data-state="4"] .s-brush { opacity: 1; }
-.s-rod { stroke: #ffffff; stroke-width: 6; }
+.s-brushspin { transform-origin: 0 0; transform-box: view-box; animation: spin .45s linear infinite; }
 .s-brushhead { fill: var(--teal); }
-.story-scene[data-state="4"] .s-brush { transform: translateY(-120px); }
-.story-scene[data-state="4"] .s-lint, .story-scene[data-state="4"] .s-clumps ellipse { opacity: 0; }
-.s-air path { stroke: var(--teal); stroke-width: 5; stroke-linecap: round; fill: none; opacity: 0; transition: opacity .6s; }
-.story-scene[data-state="4"] .s-air path { opacity: 1; animation: air 1.2s ease-out infinite; }
-@keyframes air { 0% { transform: translateY(0); opacity: 0; } 30% { opacity: 1; } 100% { transform: translateY(-26px); opacity: 0; } }
+.s-cap { fill: #a9b8c2; }
+.s-burst path { opacity: 0; }
+.story-scene[data-state="4"] .s-burst path { animation: burst 1.3s ease-out forwards; animation-delay: 2.5s; }
+.story-scene[data-state="4"] .s-burst path:nth-child(odd) { animation-delay: 2.7s; animation-duration: 1.6s; }
+@keyframes burst { 0% { opacity: 0; transform: translate(0, 0); } 15% { opacity: .95; } 100% { opacity: 0; transform: translate(calc(var(--dx) + 10px), calc(var(--dy) * .6)); } }
+.s-plume ellipse { fill: #bfeee6; opacity: 0; }
+.story-scene[data-state="4"] .s-plume ellipse { animation: plume 2.2s ease-out infinite; animation-delay: 3s; }
+.story-scene[data-state="4"] .s-plume ellipse:nth-child(2) { animation-delay: 3.55s; } .story-scene[data-state="4"] .s-plume ellipse:nth-child(3) { animation-delay: 4.1s; } .story-scene[data-state="4"] .s-plume ellipse:nth-child(4) { animation-delay: 4.65s; }
+@keyframes plume { 0% { opacity: 0; transform: translate(0, 0) scale(1); } 15% { opacity: .75; } 100% { opacity: 0; transform: translate(26px, -34px) scale(3.4); } }
 .story-badge { position: absolute; left: 1.5rem; top: 1.5rem; background: rgba(255,255,255,.12); color: #fff; backdrop-filter: blur(8px); padding: .5rem .9rem; border-radius: 999px; font-weight: 700; font-size: .9rem; border: 1px solid rgba(255,255,255,.2); }
 .story-steps { display: flex; flex-direction: column; }
 .story-step { min-height: 78vh; display: flex; flex-direction: column; justify-content: center; padding: 2rem 0; opacity: .35; transition: opacity .5s; }
@@ -303,7 +329,7 @@ p { margin: 0 0 1em; }
 /* Reveal animation */
 .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
 .reveal.in { opacity: 1; transform: none; }
-@media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } .s-drum-inner { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } .s-drum-inner, .s-brushspin, .s-air-stream { animation: none; } .s-flecks, .s-plume, .s-burst { display: none; } }
 
 /* =============================================================================
    BOOKING
