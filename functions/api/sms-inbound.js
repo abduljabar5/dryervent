@@ -1,11 +1,14 @@
 // Customer texts to the business number: forward to the owner by SMS and email.
-import { xml, verifyTwilio, readParams, sendSms } from './_twilio.js';
+import { xml, verifyWebhook, readParams, sendSms } from './_twilio.js';
+import { rateLimit } from './_guard.js';
 
 export async function onRequest({ request, env }) {
+  if (!verifyWebhook(request, env)) return new Response('Forbidden', { status: 403 });
   const p = await readParams(request);
-  if (!(await verifyTwilio(request, p, env))) return new Response('Forbidden', { status: 403 });
   const from = p.get('From') || '', body = (p.get('Body') || '').trim();
   if (/^(stop|stopall|unsubscribe|cancel|end|quit|start|yes|unstop|help|info)$/i.test(body)) return xml(''); // Twilio handles these
+  // Cap forwarded texts so a leaked webhook secret can't turn the site into an SMS cannon.
+  if (!(await rateLimit(env, 'smsin', 60, 3600))) return xml('');
   const note = `Text from ${from}: ${body.slice(0, 1200)}`;
   const jobs = [];
   if (env.OWNER_PHONE) jobs.push(sendSms(env, env.OWNER_PHONE, note).catch(() => {}));
