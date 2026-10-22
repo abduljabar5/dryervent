@@ -1,6 +1,7 @@
 // POST /api/stripe-webhook — Stripe calls this when a Checkout payment completes.
 // Marks the booking paid in KV and alerts the owner. Signature is verified with STRIPE_WEBHOOK_SECRET.
 import { verifyWebhook, json } from './_stripe.js';
+import { sendSms } from './_twilio.js';
 
 export async function onRequestPost({ request, env }) {
   const raw = await request.text();
@@ -35,12 +36,7 @@ export async function onRequestPost({ request, env }) {
       body: JSON.stringify({ from: `${brand} <${env.RESEND_FROM_EMAIL}>`, to: [env.OWNER_EMAIL], subject: `Paid ${money(amount)} — ${conf} ${b.name || ''}`, text: `${line}\n\nStripe payment ${s.payment_intent || s.id}. The customer gets a receipt from Stripe automatically.` })
     }).catch(() => {}));
   }
-  if (env.OWNER_PHONE && env.TWILIO_ACCOUNT_SID && env.TWILIO_AUTH_TOKEN && env.TWILIO_FROM_NUMBER) {
-    jobs.push(fetch(`https://api.twilio.com/2010-04-01/Accounts/${env.TWILIO_ACCOUNT_SID}/Messages.json`, {
-      method: 'POST', headers: { Authorization: 'Basic ' + btoa(`${env.TWILIO_ACCOUNT_SID}:${env.TWILIO_AUTH_TOKEN}`), 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({ From: env.TWILIO_FROM_NUMBER, To: env.OWNER_PHONE, Body: line })
-    }).catch(() => {}));
-  }
+  if (env.OWNER_PHONE) jobs.push(sendSms(env, env.OWNER_PHONE, line).catch(() => {}));
   await Promise.all(jobs);
   return json(200, { received: true, conf });
 }

@@ -4,6 +4,7 @@
 import { customerBookingEmail, ownerBookingEmail, contactEmail } from './_email.js';
 import { PRICING } from '../../src/data/site.js';
 import { clientIp, rateLimit, clean, cleanMultiline, isEmail, usE164 } from './_guard.js';
+import { sendSms as twilioSend } from './_twilio.js';
 
 const json = (status, body) => new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
 const esc = (s = '') => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -24,16 +25,7 @@ async function sendEmail({ to, subject, html, text, replyTo }) {
   return { status: r.ok ? 'sent' : 'failed', code: r.status };
 }
 
-async function sendSms(to, body) {
-  const sid = cfg('TWILIO_ACCOUNT_SID'), tok = cfg('TWILIO_AUTH_TOKEN'), from = cfg('TWILIO_FROM_NUMBER');
-  if (!sid || !tok || !from || !to) return { status: 'skipped' };
-  const auth = btoa(`${sid}:${tok}`);
-  const r = await fetch(`https://api.twilio.com/2010-04-01/Accounts/${sid}/Messages.json`, {
-    method: 'POST', headers: { Authorization: `Basic ${auth}`, 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams({ From: from, To: to, Body: body })
-  });
-  return { status: r.ok ? 'sent' : 'failed', code: r.status };
-}
+const sendSms = (to, body) => twilioSend(ENV, to, body);
 
 const e164 = usE164;
 
