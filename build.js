@@ -5,7 +5,7 @@ import { CITIES } from './src/data/cities.js';
 import { SERVICES } from './src/data/services.js';
 import { FAQS, FAQ_CATEGORIES, faqsByTag } from './src/data/faqs.js';
 import { ARTICLES } from './src/data/articles.js';
-import { page, esc, money, url, clean, houseSvg, faqBlock, faqSchema, breadcrumbs, breadcrumbSchema, serviceSchema, articleSchema, speakable, ctaBand, priceCards, addonTable, trustRow, phoneLink } from './src/layout.js';
+import { page, esc, money, url, clean, houseSvg, faqBlock, faqSchema, breadcrumbs, breadcrumbSchema, serviceSchema, articleSchema, speakable, ctaBand, priceCards, addonTable, trustRow, phoneLink, asset } from './src/layout.js';
 
 const OUT = new URL('.', import.meta.url).pathname;
 const pages = []; // for sitemap
@@ -86,16 +86,16 @@ function home() {
         <!-- heat glow -->
         <rect x="90" y="250" width="120" height="100" rx="10" class="s-heat" fill="url(#s-heat)"/>
         <!-- duct -->
-        <path d="M150 270 L150 200 Q150 180 170 180 L400 180 Q420 180 420 160 L420 60" class="s-duct" stroke="url(#s-ductg)"/>
+        <path d="M150 270 L150 200 Q150 180 170 180 L400 180 Q420 180 420 160 L420 60" class="s-duct" fill="none" stroke="url(#s-ductg)"/>
         <!-- ember glow inside the first run (heat stage) -->
-        <path d="M150 272 L150 200 Q150 180 170 180 L260 180" class="s-ember"/>
+        <path d="M150 272 L150 200 Q150 180 170 180 L260 180" class="s-ember" fill="none"/>
         <!-- warm air stream -->
-        <path d="M150 270 L150 200 Q150 180 170 180 L400 180 Q420 180 420 160 L420 60" class="s-air-stream" pathLength="100"/>
+        <path d="M150 270 L150 200 Q150 180 170 180 L400 180 Q420 180 420 160 L420 60" class="s-air-stream" fill="none" pathLength="100"/>
         <!-- lint: fuzzy lining + clumps, wiped away by the brush in the fix stage -->
         <g mask="url(#s-lintmask)" filter="url(#s-fuzz)" class="s-lintwrap">
-          <path d="M150 270 L150 200 Q150 180 170 180 L400 180 Q420 180 420 160 L420 60" class="s-lint s-lint-1"/>
-          <path d="M150 270 L150 200 Q150 180 170 180 L400 180 Q420 180 420 160 L420 60" class="s-lint s-lint-2"/>
-          <path d="M150 270 L150 200 Q150 180 170 180 L400 180 Q420 180 420 160 L420 60" class="s-lint s-lint-3"/>
+          <path d="M150 270 L150 200 Q150 180 170 180 L400 180 Q420 180 420 160 L420 60" class="s-lint s-lint-1" fill="none"/>
+          <path d="M150 270 L150 200 Q150 180 170 180 L400 180 Q420 180 420 160 L420 60" class="s-lint s-lint-2" fill="none"/>
+          <path d="M150 270 L150 200 Q150 180 170 180 L400 180 Q420 180 420 160 L420 60" class="s-lint s-lint-3" fill="none"/>
           <g class="s-clumps">
             <path d="M146 196 C150 182 170 178 176 190 C182 202 160 212 150 206 C142 202 142 200 146 196 Z"/>
             <path d="M404 176 C410 164 430 166 432 180 C434 192 414 198 406 190 C400 186 400 182 404 176 Z"/>
@@ -109,7 +109,7 @@ function home() {
         <path d="M398 62 L420 38 L442 62 Z" class="s-cap"/>
         <rect x="405" y="60" width="30" height="4" class="s-cap"/>
         <!-- rotary brush: rod draws in along the duct while the spinning head travels it -->
-        <path d="M150 270 L150 200 Q150 180 170 180 L400 180 Q420 180 420 160 L420 60" class="s-rod" pathLength="1"/>
+        <path d="M150 270 L150 200 Q150 180 170 180 L400 180 Q420 180 420 160 L420 60" class="s-rod" fill="none" pathLength="1"/>
         <g class="s-brush">
           <g class="s-brushspin">
             <g stroke="#bfe6df" stroke-width="2.5" stroke-linecap="round"><line x1="9.0" y1="0.0" x2="19.0" y2="0.0"/><line x1="8.5" y1="3.1" x2="17.9" y2="6.5"/><line x1="6.9" y1="5.8" x2="14.6" y2="12.2"/><line x1="4.5" y1="7.8" x2="9.5" y2="16.5"/><line x1="1.6" y1="8.9" x2="3.3" y2="18.7"/><line x1="-1.6" y1="8.9" x2="-3.3" y2="18.7"/><line x1="-4.5" y1="7.8" x2="-9.5" y2="16.5"/><line x1="-6.9" y1="5.8" x2="-14.6" y2="12.2"/><line x1="-8.5" y1="3.1" x2="-17.9" y2="6.5"/><line x1="-9.0" y1="0.0" x2="-19.0" y2="0.0"/><line x1="-8.5" y1="-3.1" x2="-17.9" y2="-6.5"/><line x1="-6.9" y1="-5.8" x2="-14.6" y2="-12.2"/><line x1="-4.5" y1="-7.8" x2="-9.5" y2="-16.5"/><line x1="-1.6" y1="-8.9" x2="-3.3" y2="-18.7"/><line x1="1.6" y1="-8.9" x2="3.3" y2="-18.7"/><line x1="4.5" y1="-7.8" x2="9.5" y2="-16.5"/><line x1="6.9" y1="-5.8" x2="14.6" y2="-12.2"/><line x1="8.5" y1="-3.1" x2="17.9" y2="-6.5"/></g>
@@ -424,7 +424,7 @@ function booking() {
     <p class="muted small">Can't find your number? It's in your confirmation email, or ${phoneLink()} and we'll sort it out.</p>
   </div>
 </section>`,
-    scripts: '<script src="/app.js" defer></script>'
+    scripts: `<script src="${asset('/app.js')}" defer></script>`
   }), { sitemap: false });
 
   emit('/pay-success.html', page({
@@ -440,7 +440,7 @@ function booking() {
     <p class="muted small">Questions about your visit? Reply to your confirmation email or ${phoneLink()}.</p>
   </div>
 </section>`,
-    scripts: '<script src="/app.js" defer></script>'
+    scripts: `<script src="${asset('/app.js')}" defer></script>`
   }), { sitemap: false });
 
   emit('/confirmation.html', page({

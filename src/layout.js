@@ -1,5 +1,15 @@
 import { SITE, PRICING, NAV } from './data/site.js';
 
+// Cache-busting: /site.css?v=<hash of file>. Pages caches assets for hours; the hash changes whenever the file does.
+import { readFileSync as __rf } from 'node:fs';
+import { createHash as __ch } from 'node:crypto';
+const __ROOT = new URL('../', import.meta.url).pathname;
+const __hashes = {};
+export function asset(path) {
+  if (!__hashes[path]) { try { __hashes[path] = __ch('md5').update(__rf(__ROOT + path.replace(/^\//, ''))).digest('hex').slice(0, 8); } catch { __hashes[path] = String(Date.now()); } }
+  return `${path}?v=${__hashes[path]}`;
+}
+
 export const esc = (s = '') => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 export const money = (n) => '$' + Number(n).toLocaleString('en-US');
 export const clean = (path) => path.replace(/\/index\.html$/, '/').replace(/\.html(?=$|[?#])/, '');
@@ -382,7 +392,7 @@ ${keywords ? `<meta name="keywords" content="${esc(keywords)}">` : ''}
 <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/site.css">
+<link rel="stylesheet" href="${asset('/site.css')}">
 ${extraHead}
 ${schemas}
 </head>
@@ -393,7 +403,7 @@ ${navHtml(active)}
 ${body}
 </main>
 ${footerHtml(cities, services)}
-<script src="/app.js" defer></script>
+<script src="${asset('/app.js')}" defer></script>
 ${scripts}
 </body>
 </html>`;
