@@ -235,7 +235,7 @@ function booking() {
     <div class="book-main">
       <div class="book-head">
         <h1 class="h2">Book dryer vent cleaning</h1>
-        <p class="muted">About a minute. No deposit. You'll get a confirmation by email and text.</p>
+        <p class="muted">About a minute. No deposit. You'll get a confirmation by email right away.</p>
       </div>
       <div class="restore-banner" id="restore-banner" hidden>
         <span>Pick up where you left off?</span>
@@ -565,7 +565,7 @@ ${ctaBand()}`,
   }), { priority: 0.9 });
 
   const steps = [
-    ['Book online', 'Pick roof or wall vent, a date and a two-hour window. Confirmation by email and text in seconds.'],
+    ['Book online', 'Pick roof or wall vent, a date and a two-hour window. Confirmation by email in seconds.'],
     ['We arrive and test', 'Text when we\'re on the way. We confirm the vent exit, lay a drop cloth and take a baseline airflow reading at the cap.'],
     ['Disconnect and inspect', 'The dryer comes out, the transition hose comes off, and we check it for crushing, lint and improper material.'],
     ['Rotary brush + HEPA vacuum', 'Flexible rods and a nylon brush scrub the full duct while the vacuum captures the lint. We work from both ends on roof vents.'],
@@ -633,7 +633,7 @@ ${ctaBand()}`,
   emit('/privacy.html', page({ ...common, path: '/privacy.html', title: `Privacy Policy | ${SITE.name}`, description: 'How we handle the information you give us when booking.', body: `
 <section class="page-hero"><div class="container"><h1 class="h1">Privacy policy</h1></div></section>
 <section class="section"><div class="container narrow content-block">
-<p>We collect only what we need to do the job: your name, phone, email, service address and the details you enter in the booking form. We use it to schedule and perform your service, send confirmations and reminders by email and text, and follow up about the job. We don't sell or share your information with anyone except the services that send our emails and texts on our behalf.</p>
+<p>We collect only what we need to do the job: your name, phone, email, service address and the details you enter in the booking form. We use it to schedule and perform your service, send confirmations and reminders, and follow up about the job. We don't sell or share your information with anyone except the services that send our emails and texts on our behalf.</p>
 <p>Phone and text: we may call or text the number you give us about your appointment only. Reply STOP to any text to opt out. Message and data rates may apply.</p>
 <p>The site uses no advertising cookies. Your booking draft is saved in your browser's local storage so you can finish later; clear it with "Start over" on the booking page.</p>
 <p>Questions: <a href="mailto:${SITE.email}">${SITE.email}</a>.</p>

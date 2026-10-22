@@ -108,7 +108,7 @@ export const FAQS = [
   { c:'process', q:'Do you clean the vent cover outside?', a:'Yes, every time. We remove lint from the louvers or flapper, remove any illegal screen, and make sure the damper swings freely.' },
 
   // ---------------- BOOKING ----------------
-  { c:'booking', q:'How do I book dryer vent cleaning?', a:'Use the online booking form. Pick your service, tell us whether the vent exits through the roof or the wall, choose a date and two-hour arrival window, and enter your address. You get instant confirmation by email and text.' },
+  { c:'booking', q:'How do I book dryer vent cleaning?', a:'Use the online booking form. Pick your service, tell us whether the vent exits through the roof or the wall, choose a date and two-hour arrival window, and enter your address. You get an instant confirmation by email.' },
   { c:'booking', q:'How soon can you come out?', a:'Usually within 2–4 days, and often next day. Same-day slots open up when there are cancellations; call or text us if you need urgent service.' },
   { c:'booking', q:'Do you offer weekend dryer vent cleaning?', a:'Yes. Saturday appointments are available at the same price, and Sunday mornings on request.' },
   { c:'booking', q:'Can I reschedule or cancel my appointment?', a:'Yes, free of charge with at least 12 hours notice. Reply to your confirmation email, or call or text us.' },

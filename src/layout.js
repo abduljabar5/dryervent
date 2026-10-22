@@ -305,6 +305,7 @@ function navHtml(active = '') {
           <a href="${n.href}">${n.label}</a>
           <ul class="submenu">${n.children.map(c => `<li><a href="${c.href}">${c.label}</a></li>`).join('')}</ul>
         </li>` : `<li${active === n.href ? ' class="active"' : ''}><a href="${n.href}">${n.label}</a></li>`).join('')}
+        <li class="nav-tel"><a href="tel:${SITE.phoneE164}" class="btn btn-ghost">Call or text ${esc(SITE.phone)}</a><span class="muted small">${esc(SITE.hours)}</span></li>
       </ul>
     </nav>
     <div class="nav-actions">
