@@ -51,8 +51,8 @@ export const PRICING = {
 export const NAV = [
   { label: 'Services', href: '/services.html', children: [
     { label: 'Dryer Vent Cleaning', href: '/dryer-vent-cleaning.html' },
-    { label: 'Roof Dryer Vent Cleaning', href: '/roof-dryer-vent-cleaning.html' },
     { label: 'Wall & Ground Vent Cleaning', href: '/wall-dryer-vent-cleaning.html' },
+    { label: 'Roof Dryer Vent Cleaning', href: '/roof-dryer-vent-cleaning.html' },
     { label: 'Bird Nest Removal', href: '/bird-nest-in-dryer-vent.html' },
     { label: 'Dryer Vent Inspection', href: '/dryer-vent-inspection.html' },
     { label: 'Apartments & Multi-Family', href: '/multi-family-dryer-vent-cleaning.html' },
