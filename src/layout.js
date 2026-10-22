@@ -290,6 +290,26 @@ export function trustRow() {
 </ul>`;
 }
 
+// Google tag (Ads + GA4). Nothing is emitted when no ids are configured or on the admin page.
+function trackingHead(path) {
+  const t = SITE.tracking || {}; const ids = [t.ga4, t.gads].filter(Boolean);
+  if (!ids.length || /^\/admin/.test(path)) return '';
+  return `<script async src="https://www.googletagmanager.com/gtag/js?id=${ids[0]}"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());${ids.map(id => `gtag('config','${id}');`).join('')}window.DVP_TRACK=${JSON.stringify({ gads: t.gads || '', label: t.gadsBookingLabel || '' })};</script>`;
+}
+
+function landingHeader() {
+  return `<header class="site-header landing-header" id="site-header">
+  <div class="container nav-inner">
+    <a href="/" class="brand" aria-label="${esc(SITE.name)} home">
+      <svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="currentColor"/><path d="M12 28V15l8-6 8 6v13" fill="none" stroke="#fff" stroke-width="2.6" stroke-linejoin="round"/><path d="M20 28v-7" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/></svg>
+      <span class="brand-text"><span class="brand-name">${esc(SITE.shortName)}</span><span class="brand-sub">Dryer vent cleaning · Twin Cities</span></span>
+    </a>
+    <div class="nav-actions"><a href="/book.html" class="btn btn-primary btn-sm">Book online</a></div>
+  </div>
+</header>`;
+}
+
 function navHtml(active = '') {
   return `
 <header class="site-header" id="site-header">
@@ -361,7 +381,7 @@ function footerHtml(cities, services) {
 // ---------------------------------------------------------------------------
 // Page shell
 // ---------------------------------------------------------------------------
-export function page({ path, title, description, keywords = '', body, schema = [], bodyClass = '', active = '', extraHead = '', scripts = '', noindex = false, cities = [], services = [], ogType = 'website', hideStickyBook = false }) {
+export function page({ path, title, description, keywords = '', body, schema = [], bodyClass = '', active = '', extraHead = '', scripts = '', landing = false, noindex = false, cities = [], services = [], ogType = 'website', hideStickyBook = false }) {
   const canonical = url(path);
   const schemas = [businessSchema(), ...schema].map(s => `<script type="application/ld+json">${JSON.stringify(s)}</script>`).join('\n');
   const out = `<!DOCTYPE html>
@@ -394,12 +414,13 @@ ${keywords ? `<meta name="keywords" content="${esc(keywords)}">` : ''}
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="${asset('/site.css')}">
+${trackingHead(path)}
 ${extraHead}
 ${schemas}
 </head>
 <body class="${bodyClass}${hideStickyBook ? ' no-sticky' : ''}">
 <a href="#main" class="skip">Skip to content</a>
-${navHtml(active)}
+${landing ? landingHeader() : navHtml(active)}
 <main id="main">
 ${body}
 </main>

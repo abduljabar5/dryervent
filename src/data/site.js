@@ -16,6 +16,8 @@ export const SITE = {
   geo: { lat: 44.9778, lng: -93.265 },
   hours: 'Mon–Sat 7am–8pm · Sun 9am–6pm',
   foundingYear: '2026',
+  // Google Ads + GA4. Fill in after the Ads account exists; empty strings emit no tag at all.
+  tracking: { gads: '', gadsBookingLabel: '', ga4: '' },
   social: {
     google: '',   // Google Business Profile link (also used for reviews)
     facebook: '',

@@ -473,6 +473,100 @@ function booking() {
 }
 
 // ============================================================================
+// AD LANDING PAGE (noindex; all paid traffic lands here)
+// ============================================================================
+function landingPages() {
+  const faqs = [...faqsByTag('pricing').slice(0, 2), ...faqsByTag('booking').slice(0, 2), ...faqsByTag('general').slice(0, 1), ...faqsByTag('roof').slice(0, 1)];
+  const body = `
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow reveal">Minneapolis · Saint Paul · All suburbs</p>
+      <h1 class="h1 reveal">Dryer vent cleaning, <em>${money(G)} flat.</em></h1>
+      <p class="lead reveal">Full duct cleaned end to end, cap cleared, airflow tested, lint hauled away. ${money(G)} for wall vents, ${money(R)} for roof vents. No trip charge, no deposit, pay when it's done.</p>
+      <div class="hero-actions reveal">
+        <a href="/book.html" class="btn btn-primary btn-lg">Book online · 60 seconds</a>
+      </div>
+      <ul class="hero-points reveal">
+        <li>Pick a 2-hour window that suits you</li>
+        <li>Usually within 2–4 days, Saturdays too</li>
+        <li>Insured, photos and airflow reading included</li>
+      </ul>
+    </div>
+    <div class="hero-art reveal">
+      <div class="hero-house" id="hero-house" data-vent="ground">
+        ${houseSvg('roof', { id: 'lp-roof' })}
+        ${houseSvg('ground', { id: 'lp-ground' })}
+      </div>
+      <div class="hero-toggle" role="group" aria-label="Vent type">
+        <button type="button" class="active" data-hero-vent="ground">Wall vent</button>
+        <button type="button" data-hero-vent="roof">Roof vent</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">${trustRow()}</div>
+</section>
+
+<section class="section alt" id="pricing">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow">Flat-rate pricing</p>
+      <h2 class="h2">One question decides the price: where does the vent exit?</h2>
+      <p class="muted">That's all we ask when you book. Everything else is included.</p>
+    </div>
+    ${priceCards()}
+  </div>
+</section>
+
+<section class="section">
+  <div class="container split">
+    <div class="reveal">
+      <p class="eyebrow">What's included</p>
+      <h2 class="h2">Every job, every time.</h2>
+      <ul class="check-list">
+        <li>Full-length rotary brush cleaning, dryer to exterior cap</li>
+        <li>HEPA vacuum capture, drop cloth, cleanup</li>
+        <li>Exterior cap cleared, flapper freed, screens removed</li>
+        <li>Transition hose inspected, reconnected and sealed</li>
+        <li>Before &amp; after airflow reading on your receipt</li>
+        <li>Photos of the cap before and after</li>
+      </ul>
+      <a href="/book.html" class="btn btn-primary btn-lg">Book online</a>
+    </div>
+    <div class="reveal stat-grid">
+      <div class="stat"><div class="stat-n">2,900</div><div class="stat-l">U.S. home dryer fires every year</div></div>
+      <div class="stat"><div class="stat-n">34%</div><div class="stat-l">caused by failure to clean</div></div>
+      <div class="stat"><div class="stat-n">~1 hr</div><div class="stat-l">typical visit, start to finish</div></div>
+      <div class="stat"><div class="stat-n">$0</div><div class="stat-l">deposit or trip charge</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section alt">
+  <div class="container narrow">
+${faqBlock(faqs, { heading: 'Quick answers' })}
+  </div>
+</section>
+
+<section class="section center">
+  <div class="container narrow">
+    <h2 class="h2 reveal">Ready when you are.</h2>
+    <p class="lead reveal">Pick your window, get an email confirmation, pay when the job is done.</p>
+    <a href="/book.html" class="btn btn-primary btn-lg reveal">Book online · from ${money(G)}</a>
+  </div>
+</section>`;
+  emit('/lp/dryer-vent-cleaning.html', page({
+    ...common, path: '/lp/dryer-vent-cleaning.html', noindex: true, landing: true, bodyClass: 'landing',
+    title: `Dryer Vent Cleaning Twin Cities | ${money(G)} Flat, Book Online`,
+    description: `Flat-rate dryer vent cleaning in Minneapolis–St. Paul. ${money(G)} wall vents, ${money(R)} roof vents. Book a 2-hour window online in 60 seconds. No deposit.`,
+    body, scripts: `<script src="${asset('/app.js')}" defer></script>`
+  }), { sitemap: false });
+}
+
+// ============================================================================
 // SERVICES
 // ============================================================================
 function services() {
@@ -848,5 +942,5 @@ ${FAQS.slice(0, 40).map(f => `- Q: ${f.q}\n  A: ${f.a}`).join('\n')}
 for (const f of readdirSync(OUT)) if (f.endsWith('.html')) rmSync(OUT + f);
 if (existsSync(OUT + 'blog')) rmSync(OUT + 'blog', { recursive: true });
 
-home(); booking(); services(); staticPages(); cities(); faqPages(); blog(); seoFiles();
+home(); landingPages(); booking(); services(); staticPages(); cities(); faqPages(); blog(); seoFiles();
 console.log(`Built ${pages.length + 4} pages → ${OUT}`);

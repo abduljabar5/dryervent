@@ -6,6 +6,21 @@
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
   const money = (n) => '$' + Number(n).toLocaleString('en-US');
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const track = (name, params) => { try { if (typeof window.gtag === 'function') window.gtag('event', name, params || {}); } catch {} };
+
+  // ---------- Ad attribution: remember click ids / utm from the landing URL for the booking record ----------
+  try {
+    const q = new URLSearchParams(location.search);
+    const got = {}; ['gclid', 'gbraid', 'wbraid', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'].forEach(k => { const v = q.get(k); if (v) got[k] = v.slice(0, 200); });
+    if (Object.keys(got).length) sessionStorage.setItem('dvp_attr', JSON.stringify({ ...got, landing: location.pathname }));
+  } catch {}
+  const attribution = () => { try { return JSON.parse(sessionStorage.getItem('dvp_attr') || 'null'); } catch { return null; } };
+
+  // ---------- Landing pages: carry ?vent=roof into the booking links ----------
+  if (document.body.classList.contains('landing')) {
+    const v = new URLSearchParams(location.search).get('vent');
+    if (v) $$('a[href^="/book"]').forEach(l => { const u = new URL(l.href); if (!u.searchParams.get('vent')) { u.searchParams.set('vent', v); l.href = u.pathname + u.search; } });
+  }
 
   // ---------- Header / nav ----------
   const header = $('#site-header');
@@ -126,7 +141,7 @@
         <div class="admin-grid">
           <div><div class="k">Customer</div>${esc(b.name)}<br><a href="tel:${esc(String(b.phone || '').replace(/\D/g, ''))}">${esc(b.phone)}</a><br><a href="mailto:${esc(b.email)}">${esc(b.email)}</a></div>
           <div><div class="k">When / where</div><strong>${esc(b.dateLabel || b.date)}</strong>, ${esc(b.window)}${b.flexible ? ' <span class="muted">(flexible)</span>' : ''}<br><a href="https://maps.google.com/?q=${encodeURIComponent((b.address || '') + ', ' + (b.city || '') + ' MN ' + (b.zip || ''))}" target="_blank" rel="noopener">${esc(b.address)}, ${esc(b.city)} ${esc(b.zip)}</a></div>
-          <div><div class="k">Job</div>${esc(b.ventLabel)}${b.ventLocation === 'unsure' ? ' <span class="muted">(confirm on site)</span>' : ''}${b.addonLabels && b.addonLabels.length ? '<br>+ ' + b.addonLabels.map(esc).join('<br>+ ') : ''}${b.access ? `<br><span class="muted">Access: ${esc(b.access)}</span>` : ''}${b.notes ? `<br><span class="muted">Notes: ${esc(b.notes)}</span>` : ''}</div>
+          <div><div class="k">Job</div>${esc(b.ventLabel)}${b.ventLocation === 'unsure' ? ' <span class="muted">(confirm on site)</span>' : ''}${b.addonLabels && b.addonLabels.length ? '<br>+ ' + b.addonLabels.map(esc).join('<br>+ ') : ''}${b.access ? `<br><span class="muted">Access: ${esc(b.access)}</span>` : ''}${b.notes ? `<br><span class="muted">Notes: ${esc(b.notes)}</span>` : ''}${b.attribution ? `<br><span class="muted">Via: ${esc(b.attribution.gclid || b.attribution.gbraid || b.attribution.wbraid ? 'Google Ads' : (b.attribution.utm_source || 'link'))}${b.attribution.utm_campaign ? ' · ' + esc(b.attribution.utm_campaign) : ''}${b.attribution.utm_term ? ' · ' + esc(b.attribution.utm_term) : ''}</span>` : ''}</div>
           <div><div class="k">Money</div>Booked ${money(b.total)}${b.finalTotal != null && b.finalTotal !== b.total ? ` · final <strong>${money(b.finalTotal)}</strong>` : ''}
             ${b.status === 'paid' ? '' : `<label class="admin-amount">Final amount <span class="prefix">$</span><input type="number" min="0" max="5000" step="1" value="${esc(due)}" data-act="amount"></label><button class="btn btn-ghost btn-sm" data-act="save-amount">Save</button>`}
           </div>
@@ -293,6 +308,7 @@
       if (mobileNext) mobileNext.textContent = n === LAST ? 'Confirm booking' : 'Continue';
       if (n === LAST) review();
       save();
+      if (initialised || n > 1) track('booking_step', { step: n });
       if (initialised) { const anchor = $('#bk-progress') || form; window.scrollTo({ top: Math.max(0, anchor.getBoundingClientRect().top + window.scrollY - 96), behavior: reduced ? 'auto' : 'smooth' }); }
       initialised = true;
     }
@@ -323,7 +339,7 @@
         addonLabels: d.addons.map(id => (P.addons.find(a => a.id === id) || {}).label).filter(Boolean),
         addonItems: d.addons.map(id => P.addons.find(a => a.id === id)).filter(Boolean).map(a => ({ id: a.id, label: a.label, price: a.price })),
         total: total(d), dateLabel: fmtDate(d.date),
-        source: location.href, createdAt: new Date().toISOString()
+        source: location.href, attribution: attribution(), createdAt: new Date().toISOString()
       };
       try {
         const r = await fetch('/api/process-booking', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
@@ -398,6 +414,17 @@
     let b = null; try { b = JSON.parse(sessionStorage.getItem('dvp_last_booking') || 'null'); } catch {}
     const c = new URLSearchParams(location.search).get('c');
     confNum.textContent = c || (b && b.confirmationNumber) || '—';
+    // Conversion tracking: fire once per confirmation number (refreshes don't double count)
+    const conf = c || (b && b.confirmationNumber);
+    if (b && !b.offline && conf) {
+      let fired = []; try { fired = JSON.parse(localStorage.getItem('dvp_conv') || '[]'); } catch {}
+      if (!fired.includes(conf)) {
+        const value = Number(b.total) || 0;
+        track('purchase', { transaction_id: conf, value, currency: 'USD', items: [{ item_name: b.ventLabel || 'Dryer vent cleaning', price: value, quantity: 1 }] });
+        const T = window.DVP_TRACK; if (T && T.gads && T.label) track('conversion', { send_to: T.gads + '/' + T.label, value, currency: 'USD', transaction_id: conf });
+        try { localStorage.setItem('dvp_conv', JSON.stringify([...fired, conf].slice(-20))); } catch {}
+      }
+    }
     const det = $('#conf-details');
     if (b && det) {
       det.innerHTML = `

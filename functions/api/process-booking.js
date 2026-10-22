@@ -84,6 +84,13 @@ async function newConfirmation() {
   throw new Error('Could not allocate a confirmation number');
 }
 
+const ATTR_KEYS = ['gclid', 'gbraid', 'wbraid', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'landing'];
+function attribution(a) {
+  if (!a || typeof a !== 'object') return null;
+  const out = {}; for (const k of ATTR_KEYS) if (a[k]) out[k] = clean(a[k], 200);
+  return Object.keys(out).length ? out : null;
+}
+
 function validateBooking(body) {
   const errors = [];
   const ventLocation = clean(body.ventLocation, 20);
@@ -115,7 +122,7 @@ function validateBooking(body) {
     unit: clean(body.unit, 20), dryerType: clean(body.dryerType, 40), dryerAge: clean(body.dryerAge, 40), homeType: clean(body.homeType, 40),
     symptoms: (Array.isArray(body.symptoms) ? body.symptoms : []).map((x) => clean(x, 60)).filter((x) => SYMPTOMS.has(x)).slice(0, 10),
     access: cleanMultiline(body.access, 500), notes: cleanMultiline(body.notes, 1000), heard: clean(body.heard, 40),
-    smsOk: body.smsOk === true || body.smsOk === 'yes', source: clean(body.source, 200), createdAt: new Date().toISOString()
+    smsOk: body.smsOk === true || body.smsOk === 'yes', source: clean(body.source, 200), attribution: attribution(body.attribution), createdAt: new Date().toISOString()
   };
   return { booking };
 }
