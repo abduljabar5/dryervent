@@ -52,17 +52,10 @@ function layout({ brand, phone, siteUrl, email, preheader, body }) {
 </table></td></tr></table></body></html>`;
 }
 
+import { googleCalendarLink, buildIcs } from './_calendar.js';
+
 // ---------- helpers ----------
-function calendarLink(b, brand) {
-  if (!b.date || !b.window) return '';
-  const [y, m, d] = String(b.date).split('-'); if (!y || !m || !d) return '';
-  const hh = (String(b.window).match(/^(\d+)/) || [])[1] || '8';
-  const firstPart = String(b.window).split(/[–-]/)[0];
-  const h24 = (/PM/.test(firstPart) && +hh !== 12) ? +hh + 12 : +hh;
-  const t = (x) => `${y}${m}${d}T${String(x).padStart(2, '0')}0000`;
-  const q = new URLSearchParams({ action: 'TEMPLATE', text: `Dryer vent cleaning – ${brand}`, dates: `${t(h24)}/${t(h24 + 2)}`, details: `Confirmation ${b.confirmationNumber}. Arrival window ${b.window}.`, location: `${b.address}, ${b.city} MN ${b.zip}`, ctz: 'America/Chicago' });
-  return 'https://calendar.google.com/calendar/render?' + q.toString();
-}
+const calendarLink = (b, brand) => googleCalendarLink(b, brand);
 
 function addonLines(b) {
   if (Array.isArray(b.addonItems) && b.addonItems.length) return b.addonItems.map((a) => a.price ? `${esc(a.label)} <span style="color:${C.muted}">· ${money(a.price)}</span>` : esc(a.label));
@@ -96,7 +89,7 @@ export function customerBookingEmail(b, ctx) {
         <td style="padding:16px 18px;vertical-align:top"><p style="margin:0 0 2px;font:600 11px/1.4 ${FONT};letter-spacing:.1em;text-transform:uppercase;color:${C.muted}">When</p><p style="margin:0;font:700 17px/1.35 ${FONT};color:${C.navy}">${esc(whenText(b))}</p></td>
         <td style="padding:16px 18px;vertical-align:top"><p style="margin:0 0 2px;font:600 11px/1.4 ${FONT};letter-spacing:.1em;text-transform:uppercase;color:${C.muted}">Where</p><p style="margin:0;font:700 17px/1.35 ${FONT};color:${C.navy}">${esc(whereText(b))}</p></td>
       </tr></table>
-      ${cal ? button(cal, 'Add to Google Calendar', C.navy) : ''}
+      ${cal ? `${button(`${esc(ctx.siteUrl)}/api/calendar?c=${encodeURIComponent(b.confirmationNumber || '')}`, 'Add to Apple Calendar', C.navy)}${button(cal, 'Add to Google Calendar', C.navy)}<p style="margin:4px 0 0;font:400 12px/1.5 ${FONT};color:${C.muted}">The attached .ics file works with any calendar app.</p>` : ''}
       <p style="margin:14px 0 0;font:400 13px/1.5 ${FONT};color:${C.muted}">Confirmation <strong style="color:${C.navy}">${esc(b.confirmationNumber)}</strong></p>`)}
     ${card(`${h('What you booked')}${kv(serviceRows)}<div style="height:8px"></div>${p(`Pay when the job is done — card, cash, Zelle or Venmo. Prefer to pay online? <a href="${esc(ctx.siteUrl)}/pay?c=${encodeURIComponent(b.confirmationNumber || '')}" style="color:${C.orange};font-weight:600;text-decoration:none">Pay securely by card</a> any time before or after your visit.`, C.muted)}`)}
     ${card(`${h('What happens next')}${steps([
@@ -107,7 +100,9 @@ export function customerBookingEmail(b, ctx) {
     ${card(`${h('Before we arrive')}${p(`Clear the top of the dryer and a little space in front of it.${/roof/i.test(b.ventLabel || '') ? ' Keep the ladder side of the house clear of cars.' : ' Make sure we can reach the outside vent cap.'}`)}${p(`Need to change anything? Reply to this email or call/text <a href="tel:${esc(ctx.phone.replace(/\D/g, ''))}" style="color:${C.orange};font-weight:600;text-decoration:none">${esc(ctx.phone)}</a>. Free rescheduling with 12 hours notice.`, C.muted)}`)}`;
   const html = layout({ ...ctx, preheader: `Confirmed for ${whenText(b)} at ${whereText(b)}. Total ${totalText(b)}, pay on completion.`, body });
   const text = `Hi ${first},\n\nYour dryer vent cleaning with ${ctx.brand} is booked.\n\n${plainRows([['When', whenText(b)], ['Where', whereText(b)], ['Service', b.ventLabel], ...(addons.length ? [['Add-ons', (b.addonLabels || []).join(', ')]] : []), ['Total', totalText(b) + ' (pay on completion)'], ['Confirmation', b.confirmationNumber]])}\n\nBefore we arrive: clear the top of the dryer and some space in front of it.\nChanges? Reply to this email or call/text ${ctx.phone}.\n\n— ${ctx.brand}\n${ctx.siteUrl}`;
-  return { subject: `Booked: dryer vent cleaning ${b.dateLabel} (${b.confirmationNumber})`, html, text };
+  const ics = buildIcs(b, { brand: ctx.brand, phone: ctx.phone, siteUrl: ctx.siteUrl });
+  const attachments = ics ? [{ filename: `clear-vent-${b.confirmationNumber}.ics`, content: btoa(unescape(encodeURIComponent(ics))), content_type: 'text/calendar' }] : [];
+  return { subject: `Booked: dryer vent cleaning ${b.dateLabel} (${b.confirmationNumber})`, html, text, attachments };
 }
 
 export function ownerBookingEmail(b, ctx) {

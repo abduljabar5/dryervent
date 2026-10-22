@@ -15,12 +15,12 @@ const BRAND = () => cfg('BRAND_NAME', 'Clear Vent');
 const PHONE = () => cfg('BRAND_PHONE', '(612) 682-1616');
 const SITE_URL = () => cfg('SITE_URL', 'https://clearventmn.com');
 
-async function sendEmail({ to, subject, html, text, replyTo }) {
+async function sendEmail({ to, subject, html, text, replyTo, attachments }) {
   const key = cfg('RESEND_API_KEY'), from = cfg('RESEND_FROM_EMAIL');
   if (!key || !from) return { status: 'skipped', reason: 'RESEND not configured' };
   const r = await fetch('https://api.resend.com/emails', {
     method: 'POST', headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ from: `${BRAND()} <${from}>`, to: [to], subject, html, text, reply_to: replyTo || cfg('OWNER_EMAIL') || undefined })
+    body: JSON.stringify({ from: `${BRAND()} <${from}>`, to: [to], subject, html, text, reply_to: replyTo || cfg('OWNER_EMAIL') || undefined, ...(attachments && attachments.length ? { attachments } : {}) })
   });
   return { status: r.ok ? 'sent' : 'failed', code: r.status };
 }
@@ -42,7 +42,7 @@ async function handleBooking(b) {
 
   // 2. Customer email
   const cust = customerBookingEmail(b, emailCtx());
-  results.customerEmail = await sendEmail({ to: b.email, subject: cust.subject, html: cust.html, text: cust.text });
+  results.customerEmail = await sendEmail({ to: b.email, subject: cust.subject, html: cust.html, text: cust.text, attachments: cust.attachments });
 
   // 3. Owner email
   if (cfg('OWNER_EMAIL')) {

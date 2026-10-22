@@ -430,7 +430,8 @@ function booking() {
     <div class="review-card left" id="conf-details"></div>
     <div class="confirm-actions">
       <a href="/" class="btn btn-ghost">Back to home</a>
-      <a id="conf-cal" class="btn btn-primary" href="#" target="_blank" rel="noopener">Add to Google Calendar</a>
+      <a id="conf-ics" class="btn btn-primary" href="#">Add to Apple Calendar</a>
+      <a id="conf-cal" class="btn btn-ghost" href="#" target="_blank" rel="noopener">Google Calendar</a>
     </div>
     <p class="muted small" id="conf-pay-note">Pay when the job is done — card, cash, Zelle or Venmo. Prefer to pay online? <a id="conf-pay" href="/pay">Pay securely by card</a> any time before or after your visit.</p>
     <h2 class="h4">Before we arrive</h2>

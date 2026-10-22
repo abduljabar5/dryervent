@@ -174,7 +174,7 @@
     const prevBtn = $('#bk-prev'), nextBtn = $('#bk-next'), submitBtn = $('#bk-submit');
     const mobileNext = $('#mobile-next'), mobileTotal = $('#mobile-total'), mobileToggle = $('#mobile-toggle');
     const side = $('.book-side');
-    let step = 1; const LAST = steps.length;
+    let step = 1, maxStep = 1; const LAST = steps.length;
 
     const ventLabel = (v) => v ? P.base[v].label : '—';
     const data = () => {
@@ -279,9 +279,9 @@
 
     let initialised = false;
     function go(n) {
-      step = n;
+      step = n; maxStep = Math.max(maxStep, n);
       steps.forEach(s => s.hidden = +s.dataset.step !== n);
-      progs.forEach(p => { const k = +p.dataset.step; p.classList.toggle('current', k === n); p.classList.toggle('done', k < n); });
+      progs.forEach(p => { const k = +p.dataset.step; p.classList.toggle('current', k === n); p.classList.toggle('done', k < n); p.classList.toggle('reached', k !== n && k <= maxStep); });
       prevBtn.hidden = n === 1;
       nextBtn.hidden = n === LAST; submitBtn.hidden = n !== LAST;
       if (mobileNext) mobileNext.textContent = n === LAST ? 'Confirm booking' : 'Continue';
@@ -294,7 +294,8 @@
     nextBtn.addEventListener('click', next);
     if (mobileNext) mobileNext.addEventListener('click', next);
     prevBtn.addEventListener('click', () => go(step - 1));
-    progs.forEach(p => p.addEventListener('click', () => { const k = +p.dataset.step; if (k < step) go(k); }));
+    // Progress tabs: any step already visited is clickable; jumping forward re-checks the steps in between.
+    progs.forEach(p => p.addEventListener('click', () => { const k = +p.dataset.step; if (k === step || k > maxStep) return; if (k < step) return go(k); for (let i = step; i < k; i++) if (!valid(i)) return; go(k); }));
     // auto-advance after choosing vent type (feels fast on mobile)
     $$('input[name=ventLocation]', form).forEach(r => r.addEventListener('change', () => { show('ventLocation', false); if (step === 1) setTimeout(() => go(2), 350); }));
     // Enter key = next, not submit (except final step)
@@ -402,11 +403,14 @@
         <div class="row"><span>Contact</span><span>${b.name} · ${b.phone}</span></div>
         <div class="row total"><span>Total${b.ventLocation === 'unsure' ? ' (from)' : ''}</span><span>${money(b.total)}</span></div>`;
       const payLink = $('#conf-pay'); if (payLink && b.confirmationNumber) payLink.href = '/pay?c=' + encodeURIComponent(b.confirmationNumber);
+      const ics = $('#conf-ics'); if (ics) { if (b.confirmationNumber && !b.offline) ics.href = '/api/calendar?c=' + encodeURIComponent(b.confirmationNumber); else ics.hidden = true; }
       const cal = $('#conf-cal');
       if (cal && b.date) {
-        const [y, m, d] = b.date.split('-'); const hh = (b.window.match(/^(\d+)/) || [])[1] || '8';
-        const h24 = (/PM/.test(b.window.split('–')[0]) && +hh !== 12) ? +hh + 12 : +hh;
-        const start = `${y}${m}${d}T${String(h24).padStart(2, '0')}0000`, end = `${y}${m}${d}T${String(h24 + 2).padStart(2, '0')}0000`;
+        const [y, m, d] = b.date.split('-');
+        const parts = String(b.window).split(/[–-]/).map(s => s.trim()); const parse = (s) => { const m2 = s.match(/^(\d{1,2})(?::(\d{2}))?\s*(AM|PM)?$/i); return m2 ? { h: +m2[1], mer: m2[3] ? m2[3].toUpperCase() : null } : null; };
+        const pa = parse(parts[0] || '') || { h: 8, mer: 'AM' }, pb = parse(parts[1] || ''); const merA = pa.mer || (pb && pb.mer) || 'AM', merB = (pb && pb.mer) || merA;
+        const to24 = (h, mer) => mer === 'PM' ? (h % 12) + 12 : h % 12; const h24 = to24(pa.h, merA); const e24 = pb ? to24(pb.h, merB) : h24 + 2;
+        const start = `${y}${m}${d}T${String(h24).padStart(2, '0')}0000`, end = `${y}${m}${d}T${String(e24 > h24 ? e24 : h24 + 2).padStart(2, '0')}0000`;
         cal.href = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('Dryer vent cleaning – ' + (window.DVP_PRICING || {}).name)}&dates=${start}/${end}&details=${encodeURIComponent('Confirmation ' + b.confirmationNumber + '. Arrival window ' + b.window)}&location=${encodeURIComponent(b.address + ', ' + b.city + ' MN ' + b.zip)}&ctz=America/Chicago`;
       }
     } else if (det) det.innerHTML = '<p class="muted">Details were sent to your email.</p>';
