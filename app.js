@@ -415,7 +415,8 @@
         const [y, m, d] = b.date.split('-');
         const parts = String(b.window).split(/[–-]/).map(s => s.trim()); const parse = (s) => { const m2 = s.match(/^(\d{1,2})(?::(\d{2}))?\s*(AM|PM)?$/i); return m2 ? { h: +m2[1], mer: m2[3] ? m2[3].toUpperCase() : null } : null; };
         const pa = parse(parts[0] || '') || { h: 8, mer: 'AM' }, pb = parse(parts[1] || ''); const merA = pa.mer || (pb && pb.mer) || 'AM', merB = (pb && pb.mer) || merA;
-        const to24 = (h, mer) => mer === 'PM' ? (h % 12) + 12 : h % 12; const h24 = to24(pa.h, merA); const e24 = pb ? to24(pb.h, merB) : h24 + 2;
+        const to24 = (h, mer) => mer === 'PM' ? (h % 12) + 12 : h % 12; let h24 = to24(pa.h, merA); let e24 = pb ? to24(pb.h, merB) : h24 + 2;
+        if (pb && pb.h === 12 && e24 <= h24) e24 = 12; if (pb && e24 <= h24 && h24 >= 12) h24 -= 12;
         const start = `${y}${m}${d}T${String(h24).padStart(2, '0')}0000`, end = `${y}${m}${d}T${String(e24 > h24 ? e24 : h24 + 2).padStart(2, '0')}0000`;
         cal.href = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('Dryer vent cleaning – ' + (window.DVP_PRICING || {}).name)}&dates=${start}/${end}&details=${encodeURIComponent('Confirmation ' + b.confirmationNumber + '. Arrival window ' + b.window)}&location=${encodeURIComponent(b.address + ', ' + b.city + ' MN ' + b.zip)}&ctz=America/Chicago`;
       }

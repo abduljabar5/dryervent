@@ -10,8 +10,10 @@ export function windowHours(win) {
   if (!a) return null;
   const merA = a.mer || (b && b.mer) || 'AM', merB = (b && b.mer) || merA;
   const to24 = (h, mer) => (mer === 'PM' ? (h % 12) + 12 : h % 12);
-  const start = to24(a.h, merA) + a.min / 60;
-  const end = b ? to24(b.h, merB) + b.min / 60 : start + 2;
+  let start = to24(a.h, merA) + a.min / 60;
+  let end = b ? to24(b.h, merB) + b.min / 60 : start + 2;
+  if (b && b.h === 12 && end <= start) end = 12 + b.min / 60;          // "10:00–12:00 AM/PM" means ending at noon
+  if (b && end <= start && start >= 12) start -= 12;                   // "10:00–12:00 PM" style: start was really morning
   return { start, end: end > start ? end : start + 2 };
 }
 

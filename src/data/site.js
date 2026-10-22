@@ -44,7 +44,7 @@ export const PRICING = {
   // Multi-unit pricing starts here (per unit, quoted)
   multiUnitFrom: 79,
   // Time windows offered during booking
-  windows: ['8:00–10:00 AM', '10:00 AM–12:00 PM', '12:00–2:00 PM', '2:00–4:00 PM', '4:00–6:00 PM', '6:00–8:00 PM'],
+  windows: ['8:00–10:00 AM', '10:00–12:00 AM', '12:00–2:00 PM', '2:00–4:00 PM', '4:00–6:00 PM', '6:00–8:00 PM'],
   payment: 'Pay when the job is done — card, cash, Zelle or Venmo. No deposit.'
 };
 
