@@ -313,7 +313,7 @@ p { margin: 0 0 1em; }
 .book-grid { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 2.5rem; align-items: start; }
 .book-head { margin-bottom: 1.25rem; }
 .book-head .h2 { margin-bottom: .2rem; }
-.bk-progress { list-style: none; padding: 0; margin: 0 0 1.5rem; display: grid; grid-template-columns: repeat(5, 1fr); gap: .35rem; }
+.bk-progress { list-style: none; padding: 0; margin: 0 0 1.5rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: .35rem; }
 .bk-prog { display: flex; align-items: center; gap: .5rem; font-size: .8rem; font-weight: 700; color: var(--ink-3); padding: .5rem .6rem; border-radius: 8px; background: var(--surface); border: 1px solid var(--line); }
 .bk-prog span { width: 1.5rem; height: 1.5rem; border-radius: 50%; display: grid; place-items: center; background: var(--bg-2); color: var(--ink-3); font-size: .78rem; flex: none; }
 .bk-prog.current { color: var(--ink); border-color: var(--accent); }

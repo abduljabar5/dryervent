@@ -219,10 +219,8 @@ function booking() {
       </div>
       <ol class="bk-progress" id="bk-progress" aria-label="Booking steps">
         <li class="bk-prog current" data-step="1"><span>1</span>Vent</li>
-        <li class="bk-prog" data-step="2"><span>2</span>Details</li>
-        <li class="bk-prog" data-step="3"><span>3</span>Schedule</li>
-        <li class="bk-prog" data-step="4"><span>4</span>Contact</li>
-        <li class="bk-prog" data-step="5"><span>5</span>Confirm</li>
+        <li class="bk-prog" data-step="2"><span>2</span>When &amp; where</li>
+        <li class="bk-prog" data-step="3"><span>3</span>Contact</li>
       </ol>
 
       <form id="booking-form" novalidate autocomplete="on">
@@ -270,69 +268,24 @@ function booking() {
           <p class="field-error" data-error-for="ventLocation" hidden>Please choose where your vent exits, or pick "Not sure".</p>
         </fieldset>
 
-        <!-- STEP 2: details + add-ons -->
+        <!-- STEP 2: when + where -->
         <fieldset class="bk-step" data-step="2" hidden>
-          <legend class="h3">A few details about the dryer</legend>
+          <legend class="h3">When and where?</legend>
           <div class="field-row">
             <div class="field">
-              <label for="dryerType">Dryer type</label>
-              <select id="dryerType" name="dryerType">
-                <option value="electric">Electric</option>
-                <option value="gas">Gas</option>
-                <option value="unknown">Not sure</option>
-              </select>
+              <label for="date">Date</label>
+              <input type="date" id="date" name="date" required>
+              <p class="field-error" data-error-for="date" hidden>Pick a date from tomorrow onward.</p>
             </div>
             <div class="field">
-              <label for="homeType">Home type</label>
-              <select id="homeType" name="homeType">
-                <option value="single">Single-family house</option>
-                <option value="townhome">Townhome</option>
-                <option value="condo">Condo / apartment</option>
-                <option value="duplex">Duplex / multi-unit</option>
+              <label for="window">Arrival window</label>
+              <select id="window" name="window" required>
+                <option value="">Choose…</option>
+                ${PRICING.windows.map(w => `<option value="${esc(w)}">${esc(w)}</option>`).join('')}
               </select>
+              <p class="field-error" data-error-for="window" hidden>Pick an arrival window.</p>
             </div>
           </div>
-          <div class="field-row">
-            <div class="field">
-              <label for="laundryFloor">Where is the laundry room?</label>
-              <select id="laundryFloor" name="laundryFloor">
-                <option value="basement">Basement</option>
-                <option value="main">Main floor</option>
-                <option value="upper">Second floor or higher</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="lastCleaned">Last cleaned</label>
-              <select id="lastCleaned" name="lastCleaned">
-                <option value="never">Never / don't know</option>
-                <option value="1-2">1–2 years ago</option>
-                <option value="<1">Less than a year ago</option>
-                <option value="3+">3+ years ago</option>
-              </select>
-            </div>
-          </div>
-          <div class="field">
-            <span class="label">Anything you've noticed? <span class="muted">(optional)</span></span>
-            <div class="chip-group">
-              ${['Takes 2 cycles to dry','Dryer runs hot','Burning smell','Lint around outside vent','Flapper doesn\'t open','Hear birds / chirping','Just maintenance'].map(s => `<label class="chip"><input type="checkbox" name="symptoms" value="${esc(s)}"><span>${esc(s)}</span></label>`).join('')}
-            </div>
-          </div>
-          <div class="field">
-            <span class="label">Optional add-ons <span class="muted">(you can also decide on site)</span></span>
-            <div class="addon-list">
-              ${addons.map(a => `
-              <label class="addon">
-                <input type="checkbox" name="addons" value="${a.id}" data-price="${a.price}">
-                <span class="addon-body"><span class="addon-title">${esc(a.label)}</span><span class="addon-desc">${esc(a.desc)}</span></span>
-                <span class="addon-price">+${money(a.price)}</span>
-              </label>`).join('')}
-            </div>
-          </div>
-        </fieldset>
-
-        <!-- STEP 3: schedule -->
-        <fieldset class="bk-step" data-step="3" hidden>
-          <legend class="h3">Where and when</legend>
           <div class="field">
             <label for="address">Street address</label>
             <input type="text" id="address" name="address" placeholder="1234 Main St" autocomplete="street-address" required>
@@ -351,62 +304,32 @@ function booking() {
               <p class="field-error" data-error-for="zip" hidden>5-digit ZIP.</p>
             </div>
           </div>
-          <div class="field-row">
-            <div class="field">
-              <label for="date">Preferred date</label>
-              <input type="date" id="date" name="date" required>
-              <p class="field-error" data-error-for="date" hidden>Pick a date from tomorrow onward.</p>
-            </div>
-            <div class="field">
-              <label for="window">Arrival window</label>
-              <select id="window" name="window" required>
-                <option value="">Choose a window…</option>
-                ${PRICING.windows.map(w => `<option value="${esc(w)}">${esc(w)}</option>`).join('')}
-              </select>
-              <p class="field-error" data-error-for="window" hidden>Pick an arrival window.</p>
-            </div>
-          </div>
-          <label class="check-inline"><input type="checkbox" name="flexible" value="yes"> I'm flexible, text me if an earlier slot opens up</label>
-          <div class="field">
-            <label for="access">Access notes <span class="muted">(gate code, dogs, parking, where the dryer is)</span></label>
-            <textarea id="access" name="access" rows="2" placeholder="Side door, friendly dog, dryer is in the basement"></textarea>
-          </div>
         </fieldset>
 
-        <!-- STEP 4: contact -->
-        <fieldset class="bk-step" data-step="4" hidden>
-          <legend class="h3">How do we reach you?</legend>
+        <!-- STEP 3: contact + confirm -->
+        <fieldset class="bk-step" data-step="3" hidden>
+          <legend class="h3">Last step: how do we reach you?</legend>
           <div class="field-row">
             <div class="field">
-              <label for="name">Full name</label>
+              <label for="name">Name</label>
               <input type="text" id="name" name="name" autocomplete="name" required>
               <p class="field-error" data-error-for="name" hidden>Please enter your name.</p>
             </div>
             <div class="field">
-              <label for="phone">Mobile phone</label>
+              <label for="phone">Phone</label>
               <input type="tel" id="phone" name="phone" autocomplete="tel" placeholder="(612) 555-0123" required>
               <p class="field-error" data-error-for="phone" hidden>Enter a 10-digit phone number.</p>
             </div>
           </div>
           <div class="field">
-            <label for="email">Email</label>
+            <label for="email">Email <span class="muted">(for your confirmation)</span></label>
             <input type="email" id="email" name="email" autocomplete="email" required>
             <p class="field-error" data-error-for="email" hidden>Enter a valid email for your confirmation.</p>
           </div>
-          <label class="check-inline"><input type="checkbox" name="smsOk" value="yes"> Text me updates about my appointment: the confirmation, a reminder the night before, and when the tech is on the way. <span class="muted">Msg frequency varies. Msg &amp; data rates may apply. Reply STOP to opt out, HELP for help.</span></label>
           <div class="field">
-            <label for="notes">Anything else? <span class="muted">(optional)</span></label>
+            <label for="notes">Anything we should know? <span class="muted">(optional: gate code, dogs, where the dryer is)</span></label>
             <textarea id="notes" name="notes" rows="2"></textarea>
           </div>
-          <div class="field">
-            <label for="heard">How did you hear about us? <span class="muted">(optional)</span></label>
-            <select id="heard" name="heard"><option value="">Choose…</option><option>Google search</option><option>Google Maps</option><option>Nextdoor</option><option>Facebook</option><option>Friend or neighbor</option><option>Realtor</option><option>Flyer / door hanger</option><option>Other</option></select>
-          </div>
-        </fieldset>
-
-        <!-- STEP 5: review -->
-        <fieldset class="bk-step" data-step="5" hidden>
-          <legend class="h3">Review and confirm</legend>
           <div class="review-card" id="review-card"></div>
           <p class="muted small">${esc(PRICING.payment)} Free rescheduling with 12 hours notice. By booking you agree to our <a href="/terms.html" target="_blank" rel="noopener">terms</a>.</p>
           <p class="field-error" id="submit-error" hidden></p>
@@ -451,7 +374,7 @@ function booking() {
   emit('/book.html', page({
     ...common, path: '/book.html', bodyClass: 'booking', hideStickyBook: true,
     title: `Book Dryer Vent Cleaning Online | Twin Cities | $${G}`,
-    description: `Book dryer vent cleaning online in 60 seconds. Pick roof or wall vent, choose a 2-hour window, done. Flat $${G} wall / $${R} roof. No deposit, confirmation by text and email.`,
+    description: `Book dryer vent cleaning online in 60 seconds. Pick roof or wall vent, choose a 2-hour window, done. Flat $${G} wall / $${R} roof. No deposit, confirmation by email.`,
     body, scripts: `<script>window.DVP_PRICING=${pricingJson};</script>`
   }), { priority: 0.9, changefreq: 'monthly' });
 
@@ -503,7 +426,7 @@ function booking() {
   <div class="container narrow center">
     <div class="confirm-mark" aria-hidden="true"><svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div>
     <h1 class="h2">You're booked.</h1>
-    <p class="lead">Confirmation <strong id="conf-number">—</strong>. We've emailed the details and will text you a reminder the evening before.</p>
+    <p class="lead">Confirmation <strong id="conf-number">—</strong>. We've emailed the details, and we'll reach out the day before to confirm the time.</p>
     <div class="review-card left" id="conf-details"></div>
     <div class="confirm-actions">
       <a href="/" class="btn btn-ghost">Back to home</a>
@@ -513,7 +436,7 @@ function booking() {
     <h2 class="h4">Before we arrive</h2>
     <ul class="check-list left">
       <li>Clear the top of and the space in front of the dryer</li>
-      <li>Let us know about gates or dogs (reply to the confirmation text)</li>
+      <li>Let us know about gates or dogs (reply to the confirmation email)</li>
       <li>Roof vents: keep the ladder side of the house clear of cars</li>
     </ul>
     <p class="muted small">Need to change anything? Reply to your confirmation email or ${phoneLink()}.</p>
@@ -685,7 +608,7 @@ ${ctaBand()}`,
 <section class="page-hero"><div class="container"><h1 class="h1">Privacy policy</h1></div></section>
 <section class="section"><div class="container narrow content-block">
 <p>We collect only what we need to do the job: your name, phone, email, service address and the details you enter in the booking form. We use it to schedule and perform your service, send confirmations and reminders by email and text, and follow up about the job. We don't sell or share your information with anyone except the services that send our emails and texts on our behalf.</p>
-<p>Text messages: by checking the SMS box when booking you agree to receive appointment-related texts. Reply STOP to opt out at any time. Message and data rates may apply.</p>
+<p>Phone and text: we may call or text the number you give us about your appointment only. Reply STOP to any text to opt out. Message and data rates may apply.</p>
 <p>The site uses no advertising cookies. Your booking draft is saved in your browser's local storage so you can finish later; clear it with "Start over" on the booking page.</p>
 <p>Questions: <a href="mailto:${SITE.email}">${SITE.email}</a>.</p>
 </div></section>` }), { priority: 0.2 });

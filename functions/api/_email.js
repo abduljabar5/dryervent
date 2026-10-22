@@ -91,7 +91,7 @@ export function customerBookingEmail(b, ctx) {
     ['Total', `${esc(totalText(b))} <span style="color:${C.muted};font-weight:400">· pay when the job is done</span>`, true]
   ];
   const body = `
-    ${card(`${eyebrow('Booking confirmed')}${h(`You're booked, ${first}.`, 26)}${p(`Your dryer vent cleaning is on the calendar. We'll text you the evening before and again when the technician is on the way.`)}
+    ${card(`${eyebrow('Booking confirmed')}${h(`You're booked, ${first}.`, 26)}${p(`Your dryer vent cleaning is on the calendar. Everything you need is below, and we'll reach out the day before to confirm the time.`)}
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${C.soft};border-radius:12px;margin:6px 0 14px"><tr>
         <td style="padding:16px 18px;vertical-align:top"><p style="margin:0 0 2px;font:600 11px/1.4 ${FONT};letter-spacing:.1em;text-transform:uppercase;color:${C.muted}">When</p><p style="margin:0;font:700 17px/1.35 ${FONT};color:${C.navy}">${esc(whenText(b))}</p></td>
         <td style="padding:16px 18px;vertical-align:top"><p style="margin:0 0 2px;font:600 11px/1.4 ${FONT};letter-spacing:.1em;text-transform:uppercase;color:${C.muted}">Where</p><p style="margin:0;font:700 17px/1.35 ${FONT};color:${C.navy}">${esc(whereText(b))}</p></td>
@@ -100,8 +100,8 @@ export function customerBookingEmail(b, ctx) {
       <p style="margin:14px 0 0;font:400 13px/1.5 ${FONT};color:${C.muted}">Confirmation <strong style="color:${C.navy}">${esc(b.confirmationNumber)}</strong></p>`)}
     ${card(`${h('What you booked')}${kv(serviceRows)}<div style="height:8px"></div>${p(`Pay when the job is done — card, cash, Zelle or Venmo. Prefer to pay online? <a href="${esc(ctx.siteUrl)}/pay?c=${encodeURIComponent(b.confirmationNumber || '')}" style="color:${C.orange};font-weight:600;text-decoration:none">Pay securely by card</a> any time before or after your visit.`, C.muted)}`)}
     ${card(`${h('What happens next')}${steps([
-      ['Reminder the night before', 'A quick text so the time is fresh.'],
-      ['Tech on the way', 'A heads-up text about 20 minutes out.'],
+      ['Confirmed the day before', 'A quick call or email to make sure the time still works.'],
+      ['Tech on the way', 'A heads-up when we are about 20 minutes out.'],
       ['Clean, test, done', `Vent cleared end to end, airflow checked, lint hauled away. Usually ${/roof/i.test(b.ventLabel || '') ? '60–90' : '45–60'} minutes.`]
     ])}`)}
     ${card(`${h('Before we arrive')}${p(`Clear the top of the dryer and a little space in front of it.${/roof/i.test(b.ventLabel || '') ? ' Keep the ladder side of the house clear of cars.' : ' Make sure we can reach the outside vent cap.'}`)}${p(`Need to change anything? Reply to this email or call/text <a href="tel:${esc(ctx.phone.replace(/\D/g, ''))}" style="color:${C.orange};font-weight:600;text-decoration:none">${esc(ctx.phone)}</a>. Free rescheduling with 12 hours notice.`, C.muted)}`)}`;
@@ -124,13 +124,12 @@ export function ownerBookingEmail(b, ctx) {
     ['Noticed', Array.isArray(b.symptoms) && b.symptoms.length ? esc(b.symptoms.join(', ')) : ''],
     ['Access', b.access ? esc(b.access) : ''],
     ['Notes', b.notes ? esc(b.notes) : ''],
-    ['Texts', b.smsOk ? 'opted in' : 'no texts'],
     ['Heard via', b.heard ? esc(b.heard) : '']
   ];
   const body = `${card(`${eyebrow('New booking')}${h(`${totalText(b)} · ${b.city || ''} · ${b.dateLabel || ''}`, 22)}${kv(rows)}<div style="height:10px"></div>${button(`tel:${tel}`, 'Call customer')}`)}
     ${p(`Reply to this email to reach the customer directly. Confirmation ${esc(b.confirmationNumber)}.`, C.muted)}`;
   const html = layout({ ...ctx, preheader: `${b.name} · ${whenText(b)} · ${whereText(b)}`, body });
-  const text = plainRows([['Customer', `${b.name} · ${b.phone} · ${b.email}`], ['When', whenText(b)], ['Where', whereText(b)], ['Service', b.ventLabel], ['Add-ons', (b.addonLabels || []).join(', ')], ['Total', totalText(b)], ['Dryer', dryerSummary(b)], ['Noticed', (b.symptoms || []).join(', ')], ['Access', b.access], ['Notes', b.notes], ['Texts', b.smsOk ? 'opted in' : 'no'], ['Heard via', b.heard], ['Confirmation', b.confirmationNumber]]);
+  const text = plainRows([['Customer', `${b.name} · ${b.phone} · ${b.email}`], ['When', whenText(b)], ['Where', whereText(b)], ['Service', b.ventLabel], ['Add-ons', (b.addonLabels || []).join(', ')], ['Total', totalText(b)], ['Dryer', dryerSummary(b)], ['Noticed', (b.symptoms || []).join(', ')], ['Access', b.access], ['Notes', b.notes], ['Heard via', b.heard], ['Confirmation', b.confirmationNumber]]);
   return { subject: `NEW BOOKING ${totalText(b)} — ${b.city} ${b.dateLabel} ${b.window} (${b.ventLabel})`, html, text };
 }
 

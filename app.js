@@ -251,14 +251,14 @@
     function valid(n) {
       const d = data(); let ok = true;
       if (n === 1) ok = show('ventLocation', !d.ventLocation);
-      if (n === 3) {
+      if (n === 2) {
+        ok = show('date', !d.date || d.date < dateEl.min) && ok;
+        ok = show('window', !d.window) && ok;
         ok = show('address', !d.address || d.address.trim().length < 5) && ok;
         ok = show('city', !d.city || d.city.trim().length < 2) && ok;
         ok = show('zip', !/^\d{5}$/.test(d.zip || '')) && ok;
-        ok = show('date', !d.date || d.date < dateEl.min) && ok;
-        ok = show('window', !d.window) && ok;
       }
-      if (n === 4) {
+      if (n === 3) {
         ok = show('name', !d.name || d.name.trim().length < 2) && ok;
         ok = show('phone', digits(d.phone).replace(/^1/, '').length !== 10) && ok;
         ok = show('email', !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.email || '')) && ok;
@@ -267,19 +267,12 @@
       return ok;
     }
 
-    const optLabel = (id) => { const el = $('#' + id); return el && el.selectedOptions[0] ? el.selectedOptions[0].textContent : ''; };
     function review() {
       const d = data(); const t = total(d);
-      const addonRows = d.addons.map(id => P.addons.find(a => a.id === id)).filter(Boolean).map(a => `<div class="row"><span>${a.label}</span><span>+${money(a.price)}</span></div>`).join('');
       $('#review-card').innerHTML = `
-        <div class="row"><span>Service</span><span>Dryer vent cleaning <button type="button" class="edit" data-go="1">edit</button></span></div>
-        <div class="row"><span>Vent exit</span><span>${ventLabel(d.ventLocation)} — ${money(P.base[d.ventLocation].price)}</span></div>
-        ${addonRows}
-        <div class="row"><span>Dryer</span><span>${optLabel('dryerType')} · ${optLabel('homeType')} · ${optLabel('laundryFloor')} laundry <button type="button" class="edit" data-go="2">edit</button></span></div>
-        ${d.symptoms.length ? `<div class="row"><span>Noticed</span><span>${d.symptoms.join(', ')}</span></div>` : ''}
-        <div class="row"><span>When</span><span>${fmtDate(d.date)}, ${d.window}${d.flexible ? ' (flexible)' : ''} <button type="button" class="edit" data-go="3">edit</button></span></div>
+        <div class="row"><span>Vent</span><span>${ventLabel(d.ventLocation)} — ${money(P.base[d.ventLocation].price)} <button type="button" class="edit" data-go="1">edit</button></span></div>
+        <div class="row"><span>When</span><span>${fmtDate(d.date)}, ${d.window} <button type="button" class="edit" data-go="2">edit</button></span></div>
         <div class="row"><span>Where</span><span>${d.address}, ${d.city} ${d.zip}</span></div>
-        <div class="row"><span>Contact</span><span>${d.name} · ${formatPhone(d.phone)} · ${d.email} <button type="button" class="edit" data-go="4">edit</button></span></div>
         <div class="row total"><span>Total${d.ventLocation === 'unsure' ? ' (from)' : ''}</span><span>${money(t)}</span></div>`;
       $$('.edit', $('#review-card')).forEach(b => b.addEventListener('click', () => go(+b.dataset.go)));
     }
@@ -296,7 +289,6 @@
       save();
       if (initialised) { const anchor = $('#bk-progress') || form; window.scrollTo({ top: Math.max(0, anchor.getBoundingClientRect().top + window.scrollY - 96), behavior: reduced ? 'auto' : 'smooth' }); }
       initialised = true;
-      if (n === 2) setTimeout(() => { const f = $('#dryerType'); f && f.focus({ preventScroll: true }); }, 350);
     }
     const next = () => { if (step < LAST && valid(step)) go(step + 1); else if (step === LAST) form.requestSubmit(); };
     nextBtn.addEventListener('click', next);
@@ -312,7 +304,7 @@
     // Submit
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      if (!valid(1) || !valid(3) || !valid(4)) return;
+      if (!valid(1) || !valid(2) || !valid(3)) return;
       const d = data();
       const err = $('#submit-error'); err.hidden = true;
       submitBtn.disabled = true; if (mobileNext) mobileNext.disabled = true; submitBtn.textContent = 'Booking…';
@@ -323,7 +315,7 @@
         ventLabel: ventLabel(d.ventLocation), basePrice: P.base[d.ventLocation].price,
         addonLabels: d.addons.map(id => (P.addons.find(a => a.id === id) || {}).label).filter(Boolean),
         addonItems: d.addons.map(id => P.addons.find(a => a.id === id)).filter(Boolean).map(a => ({ id: a.id, label: a.label, price: a.price })),
-        total: total(d), dateLabel: fmtDate(d.date), smsOk: d.smsOk === 'yes', flexible: d.flexible === 'yes',
+        total: total(d), dateLabel: fmtDate(d.date),
         source: location.href, createdAt: new Date().toISOString()
       };
       try {
@@ -345,7 +337,7 @@
         submitBtn.disabled = false; if (mobileNext) mobileNext.disabled = false; submitBtn.textContent = 'Confirm booking';
       }
     });
-    function f2step(f) { return f === 'ventLocation' ? 1 : ['date', 'window', 'address', 'city', 'zip'].includes(f) ? 3 : 4; }
+    function f2step(f) { return f === 'ventLocation' ? 1 : ['date', 'window', 'address', 'city', 'zip'].includes(f) ? 2 : 3; }
     function formatPhone(p) { const d = digits(p).replace(/^1(?=\d{10}$)/, ''); return d.length === 10 ? `(${d.slice(0, 3)}) ${d.slice(3, 6)}-${d.slice(6)}` : p; }
     function mailto(b) { const body = `Booking request ${b.confirmationNumber}%0A${b.ventLabel}%0A${b.dateLabel} ${b.window}%0A${b.address}, ${b.city} ${b.zip}%0A${b.name} ${b.phone}%0ATotal ${money(b.total)}`; return `mailto:?subject=Dryer vent cleaning request&body=${body}`; }
 

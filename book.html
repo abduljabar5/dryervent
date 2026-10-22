@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Book Dryer Vent Cleaning Online | Twin Cities | $139</title>
-<meta name="description" content="Book dryer vent cleaning online in 60 seconds. Pick roof or wall vent, choose a 2-hour window, done. Flat $139 wall / $199 roof. No deposit, confirmation by text and email.">
+<meta name="description" content="Book dryer vent cleaning online in 60 seconds. Pick roof or wall vent, choose a 2-hour window, done. Flat $139 wall / $199 roof. No deposit, confirmation by email.">
 
 <meta name="author" content="Clear Vent">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
@@ -14,12 +14,12 @@
 <meta property="og:site_name" content="Clear Vent">
 <meta property="og:url" content="https://clearventmn.com/book">
 <meta property="og:title" content="Book Dryer Vent Cleaning Online | Twin Cities | $139">
-<meta property="og:description" content="Book dryer vent cleaning online in 60 seconds. Pick roof or wall vent, choose a 2-hour window, done. Flat $139 wall / $199 roof. No deposit, confirmation by text and email.">
+<meta property="og:description" content="Book dryer vent cleaning online in 60 seconds. Pick roof or wall vent, choose a 2-hour window, done. Flat $139 wall / $199 roof. No deposit, confirmation by email.">
 <meta property="og:image" content="https://clearventmn.com/images/og.png">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Book Dryer Vent Cleaning Online | Twin Cities | $139">
-<meta name="twitter:description" content="Book dryer vent cleaning online in 60 seconds. Pick roof or wall vent, choose a 2-hour window, done. Flat $139 wall / $199 roof. No deposit, confirmation by text and email.">
+<meta name="twitter:description" content="Book dryer vent cleaning online in 60 seconds. Pick roof or wall vent, choose a 2-hour window, done. Flat $139 wall / $199 roof. No deposit, confirmation by email.">
 <meta name="twitter:image" content="https://clearventmn.com/images/og.png">
 <meta name="geo.region" content="US-MN"><meta name="geo.placename" content="Minneapolis–Saint Paul">
 <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
@@ -72,10 +72,8 @@
       </div>
       <ol class="bk-progress" id="bk-progress" aria-label="Booking steps">
         <li class="bk-prog current" data-step="1"><span>1</span>Vent</li>
-        <li class="bk-prog" data-step="2"><span>2</span>Details</li>
-        <li class="bk-prog" data-step="3"><span>3</span>Schedule</li>
-        <li class="bk-prog" data-step="4"><span>4</span>Contact</li>
-        <li class="bk-prog" data-step="5"><span>5</span>Confirm</li>
+        <li class="bk-prog" data-step="2"><span>2</span>When &amp; where</li>
+        <li class="bk-prog" data-step="3"><span>3</span>Contact</li>
       </ol>
 
       <form id="booking-form" novalidate autocomplete="on">
@@ -267,94 +265,24 @@
           <p class="field-error" data-error-for="ventLocation" hidden>Please choose where your vent exits, or pick "Not sure".</p>
         </fieldset>
 
-        <!-- STEP 2: details + add-ons -->
+        <!-- STEP 2: when + where -->
         <fieldset class="bk-step" data-step="2" hidden>
-          <legend class="h3">A few details about the dryer</legend>
+          <legend class="h3">When and where?</legend>
           <div class="field-row">
             <div class="field">
-              <label for="dryerType">Dryer type</label>
-              <select id="dryerType" name="dryerType">
-                <option value="electric">Electric</option>
-                <option value="gas">Gas</option>
-                <option value="unknown">Not sure</option>
-              </select>
+              <label for="date">Date</label>
+              <input type="date" id="date" name="date" required>
+              <p class="field-error" data-error-for="date" hidden>Pick a date from tomorrow onward.</p>
             </div>
             <div class="field">
-              <label for="homeType">Home type</label>
-              <select id="homeType" name="homeType">
-                <option value="single">Single-family house</option>
-                <option value="townhome">Townhome</option>
-                <option value="condo">Condo / apartment</option>
-                <option value="duplex">Duplex / multi-unit</option>
+              <label for="window">Arrival window</label>
+              <select id="window" name="window" required>
+                <option value="">Choose…</option>
+                <option value="8:00–10:00 AM">8:00–10:00 AM</option><option value="10:00 AM–12:00 PM">10:00 AM–12:00 PM</option><option value="12:00–2:00 PM">12:00–2:00 PM</option><option value="2:00–4:00 PM">2:00–4:00 PM</option><option value="4:00–6:00 PM">4:00–6:00 PM</option>
               </select>
+              <p class="field-error" data-error-for="window" hidden>Pick an arrival window.</p>
             </div>
           </div>
-          <div class="field-row">
-            <div class="field">
-              <label for="laundryFloor">Where is the laundry room?</label>
-              <select id="laundryFloor" name="laundryFloor">
-                <option value="basement">Basement</option>
-                <option value="main">Main floor</option>
-                <option value="upper">Second floor or higher</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="lastCleaned">Last cleaned</label>
-              <select id="lastCleaned" name="lastCleaned">
-                <option value="never">Never / don't know</option>
-                <option value="1-2">1–2 years ago</option>
-                <option value="<1">Less than a year ago</option>
-                <option value="3+">3+ years ago</option>
-              </select>
-            </div>
-          </div>
-          <div class="field">
-            <span class="label">Anything you've noticed? <span class="muted">(optional)</span></span>
-            <div class="chip-group">
-              <label class="chip"><input type="checkbox" name="symptoms" value="Takes 2 cycles to dry"><span>Takes 2 cycles to dry</span></label><label class="chip"><input type="checkbox" name="symptoms" value="Dryer runs hot"><span>Dryer runs hot</span></label><label class="chip"><input type="checkbox" name="symptoms" value="Burning smell"><span>Burning smell</span></label><label class="chip"><input type="checkbox" name="symptoms" value="Lint around outside vent"><span>Lint around outside vent</span></label><label class="chip"><input type="checkbox" name="symptoms" value="Flapper doesn't open"><span>Flapper doesn't open</span></label><label class="chip"><input type="checkbox" name="symptoms" value="Hear birds / chirping"><span>Hear birds / chirping</span></label><label class="chip"><input type="checkbox" name="symptoms" value="Just maintenance"><span>Just maintenance</span></label>
-            </div>
-          </div>
-          <div class="field">
-            <span class="label">Optional add-ons <span class="muted">(you can also decide on site)</span></span>
-            <div class="addon-list">
-              
-              <label class="addon">
-                <input type="checkbox" name="addons" value="birdnest" data-price="69">
-                <span class="addon-body"><span class="addon-title">Bird nest / animal debris removal</span><span class="addon-desc">Remove nests and debris packed in the vent run or cap.</span></span>
-                <span class="addon-price">+$69</span>
-              </label>
-              <label class="addon">
-                <input type="checkbox" name="addons" value="birdguard" data-price="89">
-                <span class="addon-body"><span class="addon-title">Pest-proof vent cover install</span><span class="addon-desc">Louvered cap with guard so birds and rodents stay out.</span></span>
-                <span class="addon-price">+$89</span>
-              </label>
-              <label class="addon">
-                <input type="checkbox" name="addons" value="interior" data-price="49">
-                <span class="addon-body"><span class="addon-title">Dryer interior lint cleanout</span><span class="addon-desc">Lint behind the drum, around the heating element and blower.</span></span>
-                <span class="addon-price">+$49</span>
-              </label>
-              <label class="addon">
-                <input type="checkbox" name="addons" value="hose" data-price="39">
-                <span class="addon-body"><span class="addon-title">Replace flexible transition hose</span><span class="addon-desc">Swap crushed foil/plastic hose for semi-rigid aluminum.</span></span>
-                <span class="addon-price">+$39</span>
-              </label>
-              <label class="addon">
-                <input type="checkbox" name="addons" value="second" data-price="89">
-                <span class="addon-body"><span class="addon-title">Second dryer at same address</span><span class="addon-desc">Each additional dryer vent on the same visit.</span></span>
-                <span class="addon-price">+$89</span>
-              </label>
-              <label class="addon">
-                <input type="checkbox" name="addons" value="camera" data-price="29">
-                <span class="addon-body"><span class="addon-title">Camera inspection + photo report</span><span class="addon-desc">Before/after photos and a note on duct condition.</span></span>
-                <span class="addon-price">+$29</span>
-              </label>
-            </div>
-          </div>
-        </fieldset>
-
-        <!-- STEP 3: schedule -->
-        <fieldset class="bk-step" data-step="3" hidden>
-          <legend class="h3">Where and when</legend>
           <div class="field">
             <label for="address">Street address</label>
             <input type="text" id="address" name="address" placeholder="1234 Main St" autocomplete="street-address" required>
@@ -373,62 +301,32 @@
               <p class="field-error" data-error-for="zip" hidden>5-digit ZIP.</p>
             </div>
           </div>
-          <div class="field-row">
-            <div class="field">
-              <label for="date">Preferred date</label>
-              <input type="date" id="date" name="date" required>
-              <p class="field-error" data-error-for="date" hidden>Pick a date from tomorrow onward.</p>
-            </div>
-            <div class="field">
-              <label for="window">Arrival window</label>
-              <select id="window" name="window" required>
-                <option value="">Choose a window…</option>
-                <option value="8:00–10:00 AM">8:00–10:00 AM</option><option value="10:00 AM–12:00 PM">10:00 AM–12:00 PM</option><option value="12:00–2:00 PM">12:00–2:00 PM</option><option value="2:00–4:00 PM">2:00–4:00 PM</option><option value="4:00–6:00 PM">4:00–6:00 PM</option>
-              </select>
-              <p class="field-error" data-error-for="window" hidden>Pick an arrival window.</p>
-            </div>
-          </div>
-          <label class="check-inline"><input type="checkbox" name="flexible" value="yes"> I'm flexible, text me if an earlier slot opens up</label>
-          <div class="field">
-            <label for="access">Access notes <span class="muted">(gate code, dogs, parking, where the dryer is)</span></label>
-            <textarea id="access" name="access" rows="2" placeholder="Side door, friendly dog, dryer is in the basement"></textarea>
-          </div>
         </fieldset>
 
-        <!-- STEP 4: contact -->
-        <fieldset class="bk-step" data-step="4" hidden>
-          <legend class="h3">How do we reach you?</legend>
+        <!-- STEP 3: contact + confirm -->
+        <fieldset class="bk-step" data-step="3" hidden>
+          <legend class="h3">Last step: how do we reach you?</legend>
           <div class="field-row">
             <div class="field">
-              <label for="name">Full name</label>
+              <label for="name">Name</label>
               <input type="text" id="name" name="name" autocomplete="name" required>
               <p class="field-error" data-error-for="name" hidden>Please enter your name.</p>
             </div>
             <div class="field">
-              <label for="phone">Mobile phone</label>
+              <label for="phone">Phone</label>
               <input type="tel" id="phone" name="phone" autocomplete="tel" placeholder="(612) 555-0123" required>
               <p class="field-error" data-error-for="phone" hidden>Enter a 10-digit phone number.</p>
             </div>
           </div>
           <div class="field">
-            <label for="email">Email</label>
+            <label for="email">Email <span class="muted">(for your confirmation)</span></label>
             <input type="email" id="email" name="email" autocomplete="email" required>
             <p class="field-error" data-error-for="email" hidden>Enter a valid email for your confirmation.</p>
           </div>
-          <label class="check-inline"><input type="checkbox" name="smsOk" value="yes"> Text me updates about my appointment: the confirmation, a reminder the night before, and when the tech is on the way. <span class="muted">Msg frequency varies. Msg &amp; data rates may apply. Reply STOP to opt out, HELP for help.</span></label>
           <div class="field">
-            <label for="notes">Anything else? <span class="muted">(optional)</span></label>
+            <label for="notes">Anything we should know? <span class="muted">(optional: gate code, dogs, where the dryer is)</span></label>
             <textarea id="notes" name="notes" rows="2"></textarea>
           </div>
-          <div class="field">
-            <label for="heard">How did you hear about us? <span class="muted">(optional)</span></label>
-            <select id="heard" name="heard"><option value="">Choose…</option><option>Google search</option><option>Google Maps</option><option>Nextdoor</option><option>Facebook</option><option>Friend or neighbor</option><option>Realtor</option><option>Flyer / door hanger</option><option>Other</option></select>
-          </div>
-        </fieldset>
-
-        <!-- STEP 5: review -->
-        <fieldset class="bk-step" data-step="5" hidden>
-          <legend class="h3">Review and confirm</legend>
           <div class="review-card" id="review-card"></div>
           <p class="muted small">Pay when the job is done — card, cash, Zelle or Venmo. No deposit. Free rescheduling with 12 hours notice. By booking you agree to our <a href="/terms" target="_blank" rel="noopener">terms</a>.</p>
           <p class="field-error" id="submit-error" hidden></p>
