@@ -457,3 +457,17 @@ input.invalid, select.invalid { border-color: var(--warn); }
 
 /* Honeypot field for bots; invisible to people and screen readers. */
 .hp{position:absolute!important;left:-9999px;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none}
+
+/* SMS opt-in: a big tap target right under the phone field */
+.sms-opt { display: flex; gap: .8rem; align-items: flex-start; margin: -.25rem 0 1.1rem; padding: .85rem 1rem; border: 2px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); cursor: pointer; transition: border-color .15s, background .15s; }
+.sms-opt:hover { border-color: var(--line-2); }
+.sms-opt input { position: absolute; opacity: 0; pointer-events: none; }
+.sms-opt-box { flex: none; width: 1.5rem; height: 1.5rem; margin-top: .1rem; border: 2px solid var(--ink-3); border-radius: 7px; background: #fff; display: grid; place-items: center; transition: background .15s, border-color .15s; }
+.sms-opt-box::after { content: ''; width: .5rem; height: .85rem; border: solid #fff; border-width: 0 3px 3px 0; transform: rotate(45deg) translate(-1px, -2px); opacity: 0; }
+.sms-opt input:checked ~ .sms-opt-box { background: var(--accent); border-color: var(--accent); }
+.sms-opt input:checked ~ .sms-opt-box::after { opacity: 1; }
+.sms-opt input:checked ~ .sms-opt-text strong { color: var(--ink); }
+.sms-opt:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+.sms-opt input:focus-visible ~ .sms-opt-box { outline: 3px solid var(--teal); outline-offset: 2px; }
+.sms-opt-text { display: flex; flex-direction: column; gap: .15rem; line-height: 1.35; }
+.sms-opt-text strong { font-size: .98rem; color: var(--ink-2); }

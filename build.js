@@ -346,6 +346,11 @@ function booking() {
               <p class="field-error" data-error-for="phone" hidden>Enter a 10-digit phone number.</p>
             </div>
           </div>
+          <label class="sms-opt">
+            <input type="checkbox" name="smsOk" value="yes">
+            <span class="sms-opt-box" aria-hidden="true"></span>
+            <span class="sms-opt-text"><strong>Text me my confirmation and a heads-up when we're on the way</strong><span class="muted small">Appointment texts only. Msg &amp; data rates may apply. Reply STOP to opt out.</span></span>
+          </label>
           <div class="field">
             <label for="email">Email <span class="muted">(for your confirmation)</span></label>
             <input type="email" id="email" name="email" autocomplete="email" required>
