@@ -424,7 +424,7 @@ ${landing ? landingHeader() : navHtml(active)}
 <main id="main">
 ${body}
 </main>
-${footerHtml(cities, services)}
+${landing ? footerHtml(cities, services).replace(/<a href="tel:[^"]*"[^>]*>([^<]*)<\/a>/g, '<span>$1</span>') : footerHtml(cities, services)}
 <script src="${asset('/app.js')}" defer></script>
 ${scripts}
 </body>
