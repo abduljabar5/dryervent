@@ -404,6 +404,7 @@ function booking() {
   }), { priority: 0.9, changefreq: 'monthly' });
 
   // Confirmation
+  if (SITE.onlinePayments) {
   emit('/pay.html', page({
     ...common, path: '/pay.html', noindex: true, hideStickyBook: true,
     title: `Pay Online | ${SITE.shortName}`, description: 'Pay for your dryer vent cleaning securely by card.',
@@ -442,6 +443,7 @@ function booking() {
 </section>`,
     scripts: `<script src="${asset('/app.js')}" defer></script>`
   }), { sitemap: false });
+  }
 
   emit('/confirmation.html', page({
     ...common, path: '/confirmation.html', noindex: true, hideStickyBook: true,
@@ -458,7 +460,7 @@ function booking() {
       <a id="conf-ics" class="btn btn-primary" href="#">Add to Apple Calendar</a>
       <a id="conf-cal" class="btn btn-ghost" href="#" target="_blank" rel="noopener">Google Calendar</a>
     </div>
-    <p class="muted small" id="conf-pay-note">Pay when the job is done — card, cash, Zelle or Venmo. Prefer to pay online? <a id="conf-pay" href="/pay">Pay securely by card</a> any time before or after your visit.</p>
+    <p class="muted small" id="conf-pay-note">Pay when the job is done — card, cash, Zelle or Venmo.${SITE.onlinePayments ? ' Prefer to pay online? <a id="conf-pay" href="/pay">Pay securely by card</a> any time before or after your visit.' : ''}</p>
     <h2 class="h4">Before we arrive</h2>
     <ul class="check-list left">
       <li>Clear the top of and the space in front of the dryer</li>
@@ -751,7 +753,7 @@ ${ctaBand()}`,
 <section class="section"><div class="container">
 <h1 class="h2">Bookings</h1>
 <form id="admin-form" class="admin-form"><input type="password" id="admin-token" placeholder="Admin token" autocomplete="current-password"><button class="btn btn-primary" type="submit">Load</button><select id="admin-show" aria-label="Show"><option value="open">Open jobs</option><option value="paid">Paid</option><option value="all">All</option></select></form>
-<p class="muted small">Set the final amount after you confirm roof vs wall on site; the pay link and Stripe checkout use it. Mark cash, Zelle or Venmo payments here. Card payments through the pay link mark themselves.</p>
+<p class="muted small">Set the final amount after you confirm roof vs wall on site. Mark cash, Zelle, Venmo or card-in-person payments here.</p>
 <div id="admin-list" class="admin-list"></div>
 </div></section>` }), { sitemap: false });
 }

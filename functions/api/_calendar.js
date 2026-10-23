@@ -40,7 +40,7 @@ export function buildIcs(b, { brand = 'Clear Vent', phone = '', siteUrl = 'https
     `SUMMARY:${icsText(`Dryer vent cleaning – ${brand}`)}`,
     `LOCATION:${icsText(`${b.address}, ${b.city} MN ${b.zip}`)}`,
     `DESCRIPTION:${icsText(`Confirmation ${b.confirmationNumber}. Arrival window ${b.window}. Clear the top of the dryer and the space in front of it.${phone ? ` Questions? Call or text ${phone}.` : ''}`)}`,
-    `URL:${siteUrl}/pay?c=${encodeURIComponent(b.confirmationNumber || '')}`,
+    `URL:${siteUrl}/`,
     'BEGIN:VALARM', 'ACTION:DISPLAY', 'TRIGGER:-P1D', `DESCRIPTION:${icsText(`Dryer vent cleaning tomorrow, ${b.window}`)}`, 'END:VALARM',
     'BEGIN:VALARM', 'ACTION:DISPLAY', 'TRIGGER:-PT1H', `DESCRIPTION:${icsText(`${brand} arrives in the next hour or so`)}`, 'END:VALARM',
     'END:VEVENT', 'END:VCALENDAR'

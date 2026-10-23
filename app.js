@@ -135,7 +135,6 @@
     };
     const card = (b) => {
       const due = b.finalTotal ?? b.total;
-      const payUrl = location.origin + '/pay?c=' + encodeURIComponent(b.confirmationNumber);
       return `<div class="admin-item${b.status === 'cancelled' ? ' is-cancelled' : ''}" data-conf="${esc(b.confirmationNumber)}">
         <div class="admin-head"><div><strong>${esc(b.confirmationNumber)}</strong> ${badge(b)}</div><div class="muted small">${b.createdAt ? new Date(b.createdAt).toLocaleString() : ''}</div></div>
         <div class="admin-grid">
@@ -148,8 +147,6 @@
         </div>
         <div class="admin-actions">
           ${b.status === 'paid' ? '' : `<select data-act="method"><option value="cash">Cash</option><option value="zelle">Zelle</option><option value="venmo">Venmo</option><option value="card-in-person">Card in person</option></select><button class="btn btn-primary btn-sm" data-act="mark-paid">Mark paid</button>`}
-          <button class="btn btn-ghost btn-sm" data-act="copy-link" data-url="${esc(payUrl)}">Copy pay link</button>
-          <a class="btn btn-ghost btn-sm" href="sms:${esc(String(b.phone || '').replace(/\D/g, ''))}?&body=${encodeURIComponent(`Hi ${(b.name || '').split(' ')[0]}, here's your Clear Vent payment link for ${money(due)}: ${payUrl} — or pay cash/Zelle/Venmo. Thanks!`)}">Text pay link</a>
           ${b.status === 'cancelled' ? `<button class="btn btn-ghost btn-sm" data-act="status" data-status="new">Restore</button>` : b.status === 'paid' && b.paymentMethod !== 'stripe' ? `<button class="btn btn-ghost btn-sm" data-act="status" data-status="done">Undo paid</button>` : b.status !== 'paid' ? `<button class="btn btn-ghost btn-sm danger" data-act="status" data-status="cancelled">Cancel booking</button>` : ''}
           <span class="admin-msg muted small" aria-live="polite"></span>
         </div>
@@ -435,7 +432,6 @@
         <div class="row"><span>Where</span><span>${b.address}, ${b.city} ${b.zip}</span></div>
         <div class="row"><span>Contact</span><span>${b.name} · ${b.phone}</span></div>
         <div class="row total"><span>Total${b.ventLocation === 'unsure' ? ' (from)' : ''}</span><span>${money(b.total)}</span></div>`;
-      const payLink = $('#conf-pay'); if (payLink && b.confirmationNumber) payLink.href = '/pay?c=' + encodeURIComponent(b.confirmationNumber);
       const ics = $('#conf-ics'); if (ics) { if (b.confirmationNumber && !b.offline) ics.href = '/api/calendar?c=' + encodeURIComponent(b.confirmationNumber); else ics.hidden = true; }
       const cal = $('#conf-cal');
       if (cal && b.date) {
