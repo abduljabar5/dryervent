@@ -18,7 +18,7 @@ export const SITE = {
   foundingYear: '2026',
   // Google Ads + GA4. Fill in after the Ads account exists; empty strings emit no tag at all.
   onlinePayments: false,   // Stripe pay-online flow hidden until live keys are set up
-  tracking: { gads: 'AW-18530378755', gadsBookingLabel: '', ga4: '' },
+  tracking: { gads: 'AW-18530378755', gadsBookingLabel: '', ga4: '', clarity: 'z2397u2jm2' },
   social: {
     google: '',   // Google Business Profile link (also used for reviews)
     facebook: '',

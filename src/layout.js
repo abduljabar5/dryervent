@@ -293,8 +293,10 @@ export function trustRow() {
 // Google tag (Ads + GA4). Nothing is emitted when no ids are configured or on the admin page.
 function trackingHead(path) {
   const t = SITE.tracking || {}; const ids = [t.ga4, t.gads].filter(Boolean);
-  if (!ids.length || /^\/admin/.test(path)) return '';
-  return `<script async src="https://www.googletagmanager.com/gtag/js?id=${ids[0]}"></script>
+  if (/^\/admin/.test(path)) return '';
+  const clarity = t.clarity ? `<script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","${t.clarity}");</script>` : '';
+  if (!ids.length) return clarity;
+  return clarity + `<script async src="https://www.googletagmanager.com/gtag/js?id=${ids[0]}"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());${ids.map(id => `gtag('config','${id}');`).join('')}window.DVP_TRACK=${JSON.stringify({ gads: t.gads || '', label: t.gadsBookingLabel || '' })};</script>`;
 }
 
