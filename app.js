@@ -148,6 +148,7 @@
         <div class="admin-actions">
           ${b.status === 'paid' ? '' : `<select data-act="method"><option value="cash">Cash</option><option value="zelle">Zelle</option><option value="venmo">Venmo</option><option value="card-in-person">Card in person</option></select><button class="btn btn-primary btn-sm" data-act="mark-paid">Mark paid</button>`}
           ${b.status === 'cancelled' ? `<button class="btn btn-ghost btn-sm" data-act="status" data-status="new">Restore</button>` : b.status === 'paid' && b.paymentMethod !== 'stripe' ? `<button class="btn btn-ghost btn-sm" data-act="status" data-status="done">Undo paid</button>` : b.status !== 'paid' ? `<button class="btn btn-ghost btn-sm danger" data-act="status" data-status="cancelled">Cancel booking</button>` : ''}
+          <button class="btn btn-ghost btn-sm danger" data-act="delete">Delete</button>
           <span class="admin-msg muted small" aria-live="polite"></span>
         </div>
       </div>`;
@@ -178,6 +179,7 @@
       if (act === 'save-amount') { const v = $('[data-act=amount]', item).value; await update({ finalTotal: v === '' ? null : Number(v) }); }
       else if (act === 'mark-paid') { const v = $('[data-act=amount]', item)?.value; await update({ status: 'paid', paymentMethod: $('[data-act=method]', item).value, ...(v !== undefined && v !== '' ? { finalTotal: Number(v) } : {}) }); }
       else if (act === 'status') { if (btn.dataset.status === 'cancelled' && !confirm('Cancel booking ' + conf + '?')) return; await update({ status: btn.dataset.status }); }
+      else if (act === 'delete') { if (!confirm('Permanently delete ' + conf + '? This cannot be undone.')) return; btn.disabled = true; try { await api('/api/update-booking', { method: 'POST', body: JSON.stringify({ confirmationNumber: conf, action: 'delete' }) }); bookings = bookings.filter(b => b.confirmationNumber !== conf); render(); } catch (err) { msg.textContent = err.message; btn.disabled = false; } }
       else if (act === 'copy-link') { try { await navigator.clipboard.writeText(btn.dataset.url); msg.textContent = 'Link copied'; } catch { msg.textContent = btn.dataset.url; } }
     });
   }

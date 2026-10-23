@@ -14,6 +14,7 @@ export async function onRequestPost({ request, env }) {
   const raw = await env.BOOKINGS.get(key);
   if (!raw) return json(404, { error: 'Booking not found' });
   const b = JSON.parse(raw);
+  if (body.action === 'delete') { await env.BOOKINGS.delete(key); return json(200, { ok: true, deleted: conf }); }
   const changes = {};
 
   if ('finalTotal' in body) {
